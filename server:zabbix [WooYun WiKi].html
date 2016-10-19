@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="exporter-version" content="Evernote Mac 6.8 (453748)"/><meta name="created" content="2016-10-19 12:40:57 +0000"/><meta name="source" content="web.clip"/><meta name="source-url" content="http://wiki.wooyun.org/server:zabbix"/><meta name="updated" content="2016-10-19 12:40:57 +0000"/><title>server:zabbix [WooYun WiKi]</title></head><body><div style="-evernote-webclip:true"><br/><div style="font-size: 16px"><div style="box-sizing:border-box;font-family:sans-serif;text-size-adjust:100%;font-size:10px;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);"><div style="box-sizing:border-box;font-family:&quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;font-size:small;line-height:1.42857;color:rgb(51, 51, 51);background:rgb(253, 253, 253);"><div style="box-sizing:border-box;"><div style="box-sizing:border-box;"><span style="box-sizing:border-box;"><div style="box-sizing:border-box;"><div style="box-sizing:border-box;background-color:rgb(255, 255, 255);border-radius:4px;box-shadow:rgba(0, 0, 0, 0.0470588) 0px 1px 1px;"><div style="box-sizing:border-box;"><span style="display:table;"/>
+
+                                          
+              <div style="box-sizing:border-box;position:fixed;float:right;z-index:1024;top:10px;right:10px;">
+                
+<div style="float:right;box-sizing:border-box;background-color:rgb(255, 255, 255);border-radius:4px;box-shadow:rgba(0, 0, 0, 0.0470588) 0px 1px 1px;border-color:rgb(221, 221, 221);border:1px solid transparent;margin:0px 0px 1.4em 1.4em;width:auto;color:inherit;font-size:0.95em;margin-left:20px;">
+<h3 style="border-bottom:1px solid transparent;box-sizing:border-box;border-top-left-radius:3px;font-weight:bold;color:rgb(51, 51, 51);border-color:rgb(221, 221, 221);background-color:rgb(245, 245, 245);font-family:inherit;line-height:1.1;border-top-right-radius:3px;padding:5px;font-size:0.95em;margin:0px;cursor:pointer;"><i style="box-sizing:border-box;position:relative;top:1px;display:inline-block;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;font-weight:400;line-height:1;-webkit-font-smoothing:antialiased;padding-right:5px;"><span style="font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;font-weight:400;line-height:1;"></span></i> <strong style="line-height:1;font-weight:400;top:1px;display:inline-block;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;position:relative;-webkit-font-smoothing:antialiased;box-sizing:border-box;float:right;margin:0px 0.2em;padding-right:5px;"><span style="font-weight:400;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;line-height:1;"></span></strong></h3>
+
+</div>
+
+              </div>
+
+              
+              
+<h1 style="box-sizing:border-box;font-size:36px;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin:40px 0px 20px;padding-bottom:9px;border-bottom:1px solid rgb(238, 238, 238);margin-top:10px;">Zabbix安全配置</h1>
+<div style="box-sizing:border-box;"
+
+/>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">1、zabbix简介</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+zabbix是一个基于WEB界面的提供分布式系统监视以及网络监视功能的企业级的开源解决方案。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+zabbix能监视各种网络参数，保证服务器系统的安全运营；并提供灵活的通知机制以让系统管理员快速定位/解决存在的各种问题。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+zabbix由2部分构成，zabbix server与可选组件zabbix agent。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+zabbix server可以通过SNMP，zabbix agent，ping，端口监视等方法提供对远程服务器/网络状态的监视，数据收集等功能，它可以运行在Linux，Solaris，HP-UX，AIX，Free BSD，Open BSD，OS X等平台上。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">2、zabbix服务架设</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+</div>
+
+<h4 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:10px;margin-bottom:10px;font-size:18px;">2.1 zabbix-server安装</h4>
+<div style="box-sizing:border-box;">
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+rpm安装的方式
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">rpm <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-ivh</span> http:<span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>repo.zabbix.com<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>zabbix<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span><span style="box-sizing:border-box;color:rgb(204, 102, 204);">2.4</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>rhel<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span><span style="box-sizing:border-box;color:rgb(204, 102, 204);">6</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>x86_64<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>zabbix-release-<span style="box-sizing:border-box;color:rgb(204, 102, 204);">2.4</span>-<span style="box-sizing:border-box;color:rgb(204, 102, 204);">1</span>.el6.noarch.rpm
+<span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">yum install</span> zabbix-server zabbix-web-mysql zabbix-zabbix-web zabbix-agent zabbix-get http mysql-server <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-y</span></pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+配置mysql数据库:
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">vim</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>etc<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>my.cnf
+<span style="box-sizing:border-box;color:rgb(102, 102, 102);font-style:italic;">#默认字符集为utf-8</span>
+default-character-set = utf8
+<span style="box-sizing:border-box;color:rgb(102, 102, 102);font-style:italic;">#innodb的每个表文件单独存储</span>
+innodb_file_per_table = <span style="box-sizing:border-box;color:rgb(204, 102, 204);">1</span></pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+创建相关的表
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">mysql<span style="box-sizing:border-box;color:rgb(102, 204, 102);">&gt;</span> create database zabbix character <span style="box-sizing:border-box;color:rgb(177, 177, 0);">set</span> utf8;
+mysql<span style="box-sizing:border-box;color:rgb(102, 204, 102);">&gt;</span> grant all privileges on zabbix.<span style="box-sizing:border-box;color:rgb(102, 204, 102);">*</span> to zabbix<span style="box-sizing:border-box;color:rgb(102, 204, 102);">@</span>localhost identified by <span style="box-sizing:border-box;color:rgb(255, 0, 0);">'zabbix'</span>;</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+导入表结构
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;color:rgb(0, 0, 102);">cd</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>usr<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>share<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>doc<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>zabbix-server-mysql-2.4.4<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>create
+mysql <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-uroot</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-Dzabbix</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">&lt;</span> schema.sql
+mysql <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-uroot</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-Dzabbix</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">&lt;</span> images.sql
+mysql <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-uroot</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-Dzabbix</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">&lt;</span> data.sql</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+配置zabbix-server
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">vim</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>etc<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>zabbix<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>zabbix_server.conf
+<span style="box-sizing:border-box;color:rgb(153, 51, 51);">LogFile</span>=<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>var<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>log<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>zabbix<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>zabbix_server.log
+<span style="box-sizing:border-box;color:rgb(153, 51, 51);">LogFileSize</span>=<span style="box-sizing:border-box;color:rgb(204, 102, 204);">0</span>
+<span style="box-sizing:border-box;color:rgb(153, 51, 51);">PidFile</span>=<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>var<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>run<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>zabbix<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>zabbix_server.pid
+<span style="box-sizing:border-box;color:rgb(153, 51, 51);">DBHost</span>=localhost
+<span style="box-sizing:border-box;color:rgb(153, 51, 51);">DBName</span>=zabbix
+<span style="box-sizing:border-box;color:rgb(153, 51, 51);">DBUser</span>=zabbix
+<span style="box-sizing:border-box;color:rgb(153, 51, 51);">DBPassword</span>=zabbix
+<span style="box-sizing:border-box;color:rgb(153, 51, 51);">DBSocket</span>=<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>var<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>lib<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>mysql<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>mysql.sock
+<span style="box-sizing:border-box;color:rgb(153, 51, 51);">DBPort</span>=<span style="box-sizing:border-box;color:rgb(204, 102, 204);">3306</span>
+<span style="box-sizing:border-box;color:rgb(153, 51, 51);">StartPollers</span>=<span style="box-sizing:border-box;color:rgb(204, 102, 204);">5</span>
+<span style="box-sizing:border-box;color:rgb(153, 51, 51);">SNMPTrapperFile</span>=<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>var<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>log<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>snmptt<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>snmptt.log
+<span style="box-sizing:border-box;color:rgb(153, 51, 51);">CacheSize</span>=256M
+<span style="box-sizing:border-box;color:rgb(153, 51, 51);">AlertScriptsPath</span>=<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>etc<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>zabbix<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>script<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>alertscripts
+<span style="box-sizing:border-box;color:rgb(153, 51, 51);">ExternalScripts</span>=<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>etc<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>zabbix<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>script<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>externalscripts
+<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>etc<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>init.d<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>zabbix-server start
+<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>etc<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>init.d<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>mysqld start
+<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>etc<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>init.d<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>httpd start</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+浏览器<a href="https://web.archive.org/web/20160305221907/http://ip/zabbix" title="http://ip/zabbix" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">http://ip/zabbix</a>　按照提示配置
+</p>
+
+</div>
+
+<h4 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:10px;margin-bottom:10px;font-size:18px;">2.2 zabbix-agent安装</h4>
+<div style="box-sizing:border-box;">
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">rpm <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-ivh</span> http:<span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>repo.zabbix.com<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>zabbix<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span><span style="box-sizing:border-box;color:rgb(204, 102, 204);">2.4</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>rhel<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span><span style="box-sizing:border-box;color:rgb(204, 102, 204);">6</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>x86_64<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>zabbix-release-<span style="box-sizing:border-box;color:rgb(204, 102, 204);">2.4</span>-<span style="box-sizing:border-box;color:rgb(204, 102, 204);">1</span>.el6.noarch.rpm
+<span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">yum install</span> zabbix zabbix-agent <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-y</span></pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+配置zabbix-agent
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">vim</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>etc<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>zabbix<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>zabbix_agentd.conf
+<span style="box-sizing:border-box;color:rgb(153, 51, 51);">PidFile</span>=<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>var<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>run<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>zabbix<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>zabbix_agentd.pid
+<span style="box-sizing:border-box;color:rgb(153, 51, 51);">LogFile</span>=<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>var<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>log<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>zabbix<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>zabbix_agentd.log
+<span style="box-sizing:border-box;color:rgb(153, 51, 51);">LogFileSize</span>=<span style="box-sizing:border-box;color:rgb(204, 102, 204);">0</span>
+<span style="box-sizing:border-box;color:rgb(153, 51, 51);">Server</span>=服务端IP
+<span style="box-sizing:border-box;color:rgb(153, 51, 51);">ServerActive</span>=服务端IP
+<span style="box-sizing:border-box;color:rgb(153, 51, 51);">Hostname</span>=主机名</pre>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">3、错误配置以及利用</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+</div>
+
+<h4 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:10px;margin-bottom:10px;font-size:18px;">3.1 默认密码或者弱口令</h4>
+<div style="box-sizing:border-box;">
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+zabbix默认的口令为Admin:zabbix，或者存在弱口令，可以登录，登录后可以在后台自定义脚本，执行命令。
+</p>
+
+</div>
+
+<h4 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:10px;margin-bottom:10px;font-size:18px;">3.2 开启guest账户</h4>
+<div style="box-sizing:border-box;">
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+默认安装后是开启了guest账户的，如果没有禁止，可以通过guest账户登录，查看信息
+</p>
+
+</div>
+
+<h4 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:10px;margin-bottom:10px;font-size:18px;">3.3 开启了guest同时版本号&lt;= 2.0.8</h4>
+<div style="box-sizing:border-box;">
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+zabbix版本⇐2.0.8的时候，httpmon.php页面存在注入;开启了guest账户后可以直接访问，进行sql注入攻击。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+具体攻击方法参考:
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160305221907/http://drops.wooyun.org/papers/680" title="http://drops.wooyun.org/papers/680" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">Zabbix SQL Injection/RCE – CVE-2013-5743</a>
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">3.4 zabbix前台注入</h3>
+<div style="box-sizing:border-box;">
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+漏洞具体利用方法:
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160305221907/http://www.wooyun.org/bugs/wooyun-2010-072075" title="http://www.wooyun.org/bugs/wooyun-2010-072075" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">Zabbix的前台SQL注射漏洞0day一枚（官方测试受到影响）</a>
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">4、实际案例</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+</div>
+
+<h4 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:10px;margin-bottom:10px;font-size:18px;">4.1 zabbix弱口令</h4>
+<div style="box-sizing:border-box;">
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160305221907/http://www.wooyun.org/bugs/wooyun-2010-069679" title="http://www.wooyun.org/bugs/wooyun-2010-069679" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">土豆某zabbix弱口令</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160305221907/http://www.wooyun.org/bugs/wooyun-2010-084596" title="http://www.wooyun.org/bugs/wooyun-2010-084596" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">中国科学院计算机网络信息中心zabbix弱口令，导致命令执行</a>
+</p>
+
+</div>
+
+<h4 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:10px;margin-bottom:10px;font-size:18px;">4.2 zabbix的httpmon.php页面注入</h4>
+<div style="box-sizing:border-box;">
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160305221907/http://www.wooyun.org/bugs/wooyun-2010-086349" title="http://www.wooyun.org/bugs/wooyun-2010-086349" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">京东某站shell直入jae内网物理机内核版本过低</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160305221907/http://www.wooyun.org/bugs/wooyun-2010-053420" title="http://www.wooyun.org/bugs/wooyun-2010-053420" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">乐视ZabbbixSQL注入导致命令执行</a>
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">5、修复方案</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+zabbix最好不要放在外网
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+修改默认账户密码，同时禁用guest用户
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+对于重点的zabbix-server，最好能够做ACL访问限制
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">6、发现问题</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+收集企业WEB应用，是否包含Zabbix。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">7、相关资源</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160305221907/http://drops.wooyun.org/papers/680" title="http://drops.wooyun.org/papers/680" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">Zabbix SQL Injection/RCE – CVE-2013-5743</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160305221907/http://drops.wooyun.org/tips/68" title="http://drops.wooyun.org/tips/68" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">当渗透遇到zabbix--小谈zabbix安全</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160305221907/http://www.wooyun.org/bugs/wooyun-2010-072075" title="http://www.wooyun.org/bugs/wooyun-2010-072075" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">Zabbix的前台SQL注射漏洞0day一枚（官方测试受到影响）</a>
+</p>
+
+</div>
+
+              
+
+                            
+            <span style="display:table;clear:both;"/></div></div></div></span></div></div></div></div></div><br/></div></body></html>

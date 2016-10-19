@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="exporter-version" content="Evernote Mac 6.8 (453748)"/><meta name="created" content="2016-10-19 12:47:55 +0000"/><meta name="source" content="web.clip"/><meta name="source-url" content="http://wiki.wooyun.org/web:sql"/><meta name="updated" content="2016-10-19 12:47:55 +0000"/><title>web:sql [WooYun WiKi]</title></head><body><div style="-evernote-webclip:true"><br/><div style="font-size: 16px"><div style="box-sizing:border-box;font-family:sans-serif;text-size-adjust:100%;font-size:10px;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);"><div style="box-sizing:border-box;font-family:&quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;font-size:small;line-height:1.42857;color:rgb(51, 51, 51);background:rgb(253, 253, 253);"><div style="box-sizing:border-box;"><div style="box-sizing:border-box;"><span style="box-sizing:border-box;"><div style="box-sizing:border-box;"><div style="box-sizing:border-box;background-color:rgb(255, 255, 255);border-radius:4px;box-shadow:rgba(0, 0, 0, 0.0470588) 0px 1px 1px;"><div style="box-sizing:border-box;"><span style="display:table;"/>
+
+                                          
+              <div style="box-sizing:border-box;position:fixed;float:right;z-index:1024;top:10px;right:10px;">
+                
+<div style="float:right;box-sizing:border-box;background-color:rgb(255, 255, 255);border-radius:4px;box-shadow:rgba(0, 0, 0, 0.0470588) 0px 1px 1px;border-color:rgb(221, 221, 221);border:1px solid transparent;margin:0px 0px 1.4em 1.4em;width:auto;color:inherit;font-size:0.95em;margin-left:20px;">
+<h3 style="border-bottom:1px solid transparent;box-sizing:border-box;border-top-left-radius:3px;font-weight:bold;color:rgb(51, 51, 51);border-color:rgb(221, 221, 221);background-color:rgb(245, 245, 245);font-family:inherit;line-height:1.1;border-top-right-radius:3px;padding:5px;font-size:0.95em;margin:0px;cursor:pointer;"><i style="box-sizing:border-box;position:relative;top:1px;display:inline-block;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;font-weight:400;line-height:1;-webkit-font-smoothing:antialiased;padding-right:5px;"><span style="font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;font-weight:400;line-height:1;"></span></i> <strong style="line-height:1;font-weight:400;top:1px;display:inline-block;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;position:relative;-webkit-font-smoothing:antialiased;box-sizing:border-box;float:right;margin:0px 0.2em;padding-right:5px;"><span style="font-weight:400;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;line-height:1;"></span></strong></h3>
+
+</div>
+
+              </div>
+
+              
+              
+<h1 style="box-sizing:border-box;font-size:36px;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin:40px 0px 20px;padding-bottom:9px;border-bottom:1px solid rgb(238, 238, 238);margin-top:10px;">SQL注入（SQL Injection）</h1>
+<div style="box-sizing:border-box;"
+
+/>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">1、相关背景介绍</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<strong style="box-sizing:border-box;font-weight:700;">结构化查询语言（Structured Query Language，缩写：SQL）</strong>，是一种特殊的编程语言，用于数据库中的标准数据查询语言。1986年10月，美国国家标准学会对SQL进行规范后，以此作为关系式数据库管理系统的标准语言（ANSI X3. 135-1986），1987年得到国际标准组织的支持下成为国际标准。不过各种通行的数据库系统在其实践过程中都对SQL规范作了某些编改和扩充。所以，<strong style="box-sizing:border-box;font-weight:700;">实际上不同数据库系统之间的SQL不能完全相互通用</strong>。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<strong style="box-sizing:border-box;font-weight:700;">SQL注入（SQL Injection）</strong>是一种常见的Web安全漏洞，攻击者利用这个问题，可以访问或修改数据，或者利用潜在的数据库漏洞进行攻击。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">2、成因</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+针对SQL注入的攻击行为可描述为<strong style="box-sizing:border-box;font-weight:700;">通过在用户可控参数中注入SQL语法，破坏原有SQL结构，达到编写程序时意料之外结果的攻击行为。</strong>其成因可以归结为以下两个原因叠加造成的：
+</p>
+
+</div>
+
+<h5 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:10px;margin-bottom:10px;font-size:14px;">1. 程序编写者在处理应用程序和数据库交互时，使用字符串拼接的方式构造SQL语句</h5>
+<div style="box-sizing:border-box;"
+
+/>
+
+<h5 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:10px;margin-bottom:10px;font-size:14px;">2. 未对用户可控参数进行足够的过滤便将参数内容拼接进入到SQL语句中</h5>
+<div style="box-sizing:border-box;"
+
+/>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">3、攻击方式和危害</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+这里以MySQL为例。
+</p>
+
+</div>
+
+<h4 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:10px;margin-bottom:10px;font-size:18px;">3.1 攻击方式</h4>
+<div style="box-sizing:border-box;">
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+SQL注入的攻击方式根据应用程序处理数据库返回内容的不同，可以分为可显注入、报错注入和盲注：
+</p>
+<ul style="box-sizing:border-box;margin-top:0px;margin-bottom:10px;">
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;">可显注入：攻击者可以直接在当前界面内容中获取想要获得的内容</div>
+</li>
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;">报错注入：数据库查询返回结果并没有在页面中显示，但是应用程序将数据库报错信息打印到了页面中，所以攻击者可以构造数据库报错语句，从报错信息中获取想要获得的内容</div>
+</li>
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;">盲注：数据库查询结果无法从直观页面中获取，攻击者通过使用数据库逻辑或使数据库库执行延时等方法获取想要获得的内容</div>
+</li>
+</ul>
+
+</div>
+
+<h5 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:10px;margin-bottom:10px;font-size:14px;">3.1.1 可显注入代码示例：</h5>
+<div style="box-sizing:border-box;">
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">http:<span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>127<span style="box-sizing:border-box;color:rgb(102, 204, 102);">.</span>0<span style="box-sizing:border-box;color:rgb(102, 204, 102);">.</span>0<span style="box-sizing:border-box;color:rgb(102, 204, 102);">.</span>1<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>sqli<span style="box-sizing:border-box;color:rgb(102, 204, 102);">-</span>labs<span style="box-sizing:border-box;color:rgb(102, 204, 102);">-</span>master<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>Less<span style="box-sizing:border-box;color:rgb(102, 204, 102);">-</span><span style="box-sizing:border-box;color:rgb(204, 102, 204);">1</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>?id<span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span><span style="box-sizing:border-box;color:rgb(204, 102, 204);">1</span><span style="box-sizing:border-box;color:rgb(255, 0, 0);">' and 1=0 union select 1,email_id,3 from  emails where id=3 --+</span></pre>
+
+</div>
+
+<h5 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:10px;margin-bottom:10px;font-size:14px;">3.1.2 报错注入代码示例：</h5>
+<div style="box-sizing:border-box;">
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">http:<span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>127<span style="box-sizing:border-box;color:rgb(102, 204, 102);">.</span>0<span style="box-sizing:border-box;color:rgb(102, 204, 102);">.</span>0<span style="box-sizing:border-box;color:rgb(102, 204, 102);">.</span>1<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>sqli<span style="box-sizing:border-box;color:rgb(102, 204, 102);">-</span>labs<span style="box-sizing:border-box;color:rgb(102, 204, 102);">-</span>master<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>Less<span style="box-sizing:border-box;color:rgb(102, 204, 102);">-</span><span style="box-sizing:border-box;color:rgb(204, 102, 204);">1</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>?id<span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span><span style="box-sizing:border-box;color:rgb(204, 102, 204);">1</span><span style="box-sizing:border-box;color:rgb(255, 0, 0);">' and 1=0 union select 1,count(*),concat((select email_id from emails where id=5),0x2a,floor(rand(0)*2))x from users group by x--+</span></pre>
+
+</div>
+
+<h5 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:10px;margin-bottom:10px;font-size:14px;">3.1.3 盲注代码示例：</h5>
+<div style="box-sizing:border-box;">
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">http:<span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>127<span style="box-sizing:border-box;color:rgb(102, 204, 102);">.</span>0<span style="box-sizing:border-box;color:rgb(102, 204, 102);">.</span>0<span style="box-sizing:border-box;color:rgb(102, 204, 102);">.</span>1<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>sqli<span style="box-sizing:border-box;color:rgb(102, 204, 102);">-</span>labs<span style="box-sizing:border-box;color:rgb(102, 204, 102);">-</span>master<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>Less<span style="box-sizing:border-box;color:rgb(102, 204, 102);">-</span><span style="box-sizing:border-box;color:rgb(204, 102, 204);">1</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>?id<span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span><span style="box-sizing:border-box;color:rgb(204, 102, 204);">1</span><span style="box-sizing:border-box;color:rgb(255, 0, 0);">' and (select substr(email_id,1,1) from emails where id=3) &gt; '</span>a<span style="box-sizing:border-box;color:rgb(255, 0, 0);">' --+</span></pre>
+
+</div>
+
+<h4 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:10px;margin-bottom:10px;font-size:18px;">3、2 危害</h4>
+<div style="box-sizing:border-box;">
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+攻击者利用SQL注入漏洞，可以获取数据库中的多种信息（例如：管理员后台密码），从而脱取数据库中内容（脱库）。在特别情况下还可以修改数据库内容或者插入内容到数据库，如果数据库权限分配存在问题，或者数据库本身存在缺陷，那么攻击者可以通过SQL注入漏洞直接获取webshell或者服务器系统权限。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">4、实际案例</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+可显注入代码示例：
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160407121014/http://www.wooyun.org/bugs/wooyun-2015-0106443" title="http://www.wooyun.org/bugs/wooyun-2015-0106443" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">乐视云官方接口泄漏(账户信息接口含密码&amp;SQL注入)</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+报错注入代码示例：
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160407121014/http://www.wooyun.org/bugs/wooyun-2015-099907" title="http://www.wooyun.org/bugs/wooyun-2015-099907" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">17173游戏某站点MySQL报错注入(不带逗号注入的猜解过程)</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+盲注代码示例：
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160407121014/http://www.wooyun.org/bugs/wooyun-2010-083899" title="http://www.wooyun.org/bugs/wooyun-2010-083899" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">淘宝网某站点存在MySQL注射(附验证脚本)</a>
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">5、修复方案</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+<ol style="box-sizing:border-box;margin-top:0px;margin-bottom:10px;">
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;">使用参数检查的方式，拦截带有SQL语法的参数传入应用程序
+</div>
+</li>
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;">使用预编译的处理方式处理拼接了用户参数的SQL语句
+</div>
+</li>
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;">在参数即将进入数据库执行之前，对SQL语句的语义进行完整性检查，确认语义没有发生变化
+</div>
+</li>
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;">在出现SQL注入漏洞时，要在出现问题的参数拼接进SQL语句前进行过滤或者校验，不要依赖程序最开始处防护代码
+</div>
+</li>
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;">定期审计数据库执行日志，查看是否存在应用程序正常逻辑之外的SQL语句执行</div>
+</li>
+</ol>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">6、漏洞扫描与发现</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+sqlmap 官方站点: <a href="https://web.archive.org/web/20160407121014/http://sqlmap.org/" title="http://sqlmap.org/" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">http://sqlmap.org/</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+介绍和使用：
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160407121014/http://drops.wooyun.org/tips/143" title="http://drops.wooyun.org/tips/143" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);"> sqlmap用户手册</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160407121014/http://drops.wooyun.org/tips/401" title="http://drops.wooyun.org/tips/401" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);"> sqlmap用户手册[续]</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160407121014/http://drops.wooyun.org/tips/5254" title="http://drops.wooyun.org/tips/5254" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);"> SQLMAP进阶使用</a>
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">7、相关其他安全问题</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+无
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">8、相关资源</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160407121014/http://www.w3school.com.cn/sql/sql_syntax.asp" title="http://www.w3school.com.cn/sql/sql_syntax.asp" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">w3school：SQL语法系列教程</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160407121014/http://drops.wooyun.org/tips/123" title="http://drops.wooyun.org/tips/123" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">MySql注入科普</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160407121014/http://drops.wooyun.org/tips/2078" title="http://drops.wooyun.org/tips/2078" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">利用insert，update和delete注入获取数据</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160407121014/http://drops.wooyun.org/tips/1620" title="http://drops.wooyun.org/tips/1620" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">MSSQL注射知识库 v 1.0</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160407121014/http://drops.wooyun.org/tips/3939" title="http://drops.wooyun.org/tips/3939" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">Mongodb注入攻击</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160407121014/http://drops.wooyun.org/tips/5283" title="http://drops.wooyun.org/tips/5283" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">在SQL注入中使用DNS获取数据</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160407121014/http://drops.wooyun.org/tips/5254" title="http://drops.wooyun.org/tips/5254" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">SQLMAP进阶使用</a>
+</p>
+
+</div>
+
+              
+
+                            
+            <span style="display:table;clear:both;"/></div></div></div></span></div></div></div></div></div><br/></div></body></html>

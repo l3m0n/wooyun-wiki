@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="exporter-version" content="Evernote Mac 6.8 (453748)"/><meta name="created" content="2016-10-19 12:54:51 +0000"/><meta name="source" content="web.clip"/><meta name="source-url" content="https://web.archive.org/web/20151126232557/http://wiki.wooyun.org/enterprise:%E6%9F%A5%E6%89%BE%E5%9F%9F%E6%8E%A7%E7%9A%84%E5%87%A0%E4%B8%AA%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"/><meta name="updated" content="2016-10-19 12:54:51 +0000"/><title>enterprise:查找域控的几个常用方法 [WooYun WiKi]</title></head><body><div style="-evernote-webclip:true"><br/><div style="font-size: 16px"><div style="box-sizing:border-box;font-family:sans-serif;text-size-adjust:100%;font-size:10px;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);"><div style="box-sizing:border-box;font-family:&quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;font-size:small;line-height:1.42857;color:rgb(51, 51, 51);background:rgb(253, 253, 253);"><div style="box-sizing:border-box;"><div style="box-sizing:border-box;"><span style="box-sizing:border-box;"><div style="box-sizing:border-box;"><div style="box-sizing:border-box;background-color:rgb(255, 255, 255);border-radius:4px;box-shadow:rgba(0, 0, 0, 0.0470588) 0px 1px 1px;"><div style="box-sizing:border-box;"><span style="display:table;"/><p style="box-sizing:border-box;margin:0px 0px 10px;">1.net view
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">net view /domain</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+2.set log
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">set log</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+3.通过srv记录
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">nslookup -type=SRV _ldap._tcp.corp</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+4.使用nltest
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">nltest /dclist:corp</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+5.使用dsquery
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">DsQuery Server -domain corp</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+6.使用netdom
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">netdom query pdc</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<strong style="box-sizing:border-box;font-weight:700;">这些都是win系统自带的命令，有的时候win版本不同，有的命令会不存在，所以多一种方法，多一种成功的可能性，实际渗透，自行根据目标环境变换</strong></p><span style="display:table;clear:both;"/></div></div></div></span></div></div></div></div></div><br/></div></body></html>

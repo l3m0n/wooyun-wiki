@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="exporter-version" content="Evernote Mac 6.8 (453748)"/><meta name="created" content="2016-10-19 12:39:51 +0000"/><meta name="source" content="web.clip"/><meta name="source-url" content="https://web.archive.org/web/20160417220029/http://wiki.wooyun.org/server:mongodb?"/><meta name="updated" content="2016-10-19 12:39:51 +0000"/><title>server:mongodb [WooYun WiKi]</title></head><body><div style="-evernote-webclip:true"><br/><div style="font-size: 16px"><div style="box-sizing:border-box;font-family:sans-serif;text-size-adjust:100%;font-size:10px;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);"><div style="box-sizing:border-box;font-family:&quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;font-size:small;line-height:1.42857;color:rgb(51, 51, 51);background:rgb(253, 253, 253);"><div style="box-sizing:border-box;"><div style="box-sizing:border-box;"><span style="box-sizing:border-box;"><div style="box-sizing:border-box;"><div style="box-sizing:border-box;background-color:rgb(255, 255, 255);border-radius:4px;box-shadow:rgba(0, 0, 0, 0.0470588) 0px 1px 1px;"><div style="box-sizing:border-box;"><span style="display:table;"/>
+
+                                          
+              <div style="box-sizing:border-box;position:fixed;float:right;z-index:1024;top:10px;right:10px;">
+                
+<div style="float:right;box-sizing:border-box;background-color:rgb(255, 255, 255);border-radius:4px;box-shadow:rgba(0, 0, 0, 0.0470588) 0px 1px 1px;border-color:rgb(221, 221, 221);border:1px solid transparent;margin:0px 0px 1.4em 1.4em;width:auto;color:inherit;font-size:0.95em;margin-left:20px;">
+<h3 style="border-bottom:1px solid transparent;box-sizing:border-box;border-top-left-radius:3px;font-weight:bold;color:rgb(51, 51, 51);border-color:rgb(221, 221, 221);background-color:rgb(245, 245, 245);font-family:inherit;line-height:1.1;border-top-right-radius:3px;padding:5px;font-size:0.95em;margin:0px;cursor:pointer;"><i style="box-sizing:border-box;position:relative;top:1px;display:inline-block;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;font-weight:400;line-height:1;-webkit-font-smoothing:antialiased;padding-right:5px;"><span style="font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;font-weight:400;line-height:1;"></span></i> <strong style="line-height:1;font-weight:400;top:1px;display:inline-block;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;position:relative;-webkit-font-smoothing:antialiased;box-sizing:border-box;float:right;margin:0px 0.2em;padding-right:5px;"><span style="font-weight:400;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;line-height:1;"></span></strong></h3>
+
+</div>
+
+              </div>
+
+              
+              
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+﻿
+</p>
+
+<h1 style="box-sizing:border-box;font-size:36px;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin:40px 0px 20px;padding-bottom:9px;border-bottom:1px solid rgb(238, 238, 238);margin-top:10px;">Mongodb安全配置</h1>
+<div style="box-sizing:border-box;"
+
+/>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">1、Mongodb简介</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+MongoDB是一种文件导向数据库管理系统，由C++撰写而成，以此来解决应用程序开发社区中的大量现实问题。2007年10月，MongoDB由10gen团队所发展。2009年2月首度推出。
+Mongo DB ,是目前在IT行业非常流行的一种非关系型数据库(NoSql),其灵活的数据存储方式,备受当前IT从业人员的青睐。Mongo DB很好的实现了面向对象的思想(OO思想),在Mongo DB中 每一条记录都是一个Document对象。Mongo DB最大的优势在于所有的数据持久操作都无需开发人员手动编写SQL语句,直接调用方法就可以轻松的实现CRUD操作。
+NoSQL数据库与传统的关系型数据库相比，它具有操作简单、完全免费、源码公开、随时下载等特点，并可以用于各种商业目的。这使NoSQL产品广泛应用于各种大型门户网站和专业网站，大大降低了运营成本。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">2、Mongodb服务器架设</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+Mongodb安装：
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+Mongodb的安装、启动请参看：<a href="https://web.archive.org/web/20160417220029/http://docs.mongodb.org/manual/installation/" title="http://docs.mongodb.org/manual/installation/" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">Install MongoDB</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+添加用户:
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">use admin <span style="box-sizing:border-box;color:rgb(102, 102, 102);font-style:italic;">#进入admin数据库</span>
+db.createUser<span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>
+  <span style="box-sizing:border-box;color:rgb(102, 204, 102);">{</span>
+    user: <span style="box-sizing:border-box;color:rgb(255, 0, 0);">"root"</span>,
+    pwd: <span style="box-sizing:border-box;color:rgb(255, 0, 0);">"test"</span>,
+    roles: <span style="box-sizing:border-box;color:rgb(102, 204, 102);">[</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">{</span> role: <span style="box-sizing:border-box;color:rgb(255, 0, 0);">"userAdminAnyDatabase"</span>, db: <span style="box-sizing:border-box;color:rgb(255, 0, 0);">"admin"</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">}</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">]</span>
+  <span style="box-sizing:border-box;color:rgb(102, 204, 102);">}</span>
+<span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span> <span style="box-sizing:border-box;color:rgb(102, 102, 102);font-style:italic;">#添加用户名root，密码test的用户，若数据库未创建则会自动创建</span></pre>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">3、错误配置及利用</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+MongoDB安装时不添加任何参数,默认是不开启权限验证的,登录的用户可以对数据库任意操作而且可以远程访问数据库。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+在刚安装完毕的时候MongoDB都默认有一个admin数据库,此时admin数据库是空的,没有记录权限相关的信息。当admin.system.users一个用户都没有时，即使开启了权限验证,如果没有在admin数据库中添加用户,此时不进行任何认证还是可以做任何操作,直到在admin.system.users中添加了一个用户。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+没有权限验证的MongoDB可被Mongodb管理工具（如：MongoVUE）远程匿名连接及进行数据库操作。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+MongoDB的web界面存在漏洞，导致开启了web界面的MongoDB容易受到攻击，详见<a href="https://web.archive.org/web/20160417220029/http://drops.wooyun.org/papers/850" title="http://drops.wooyun.org/papers/850" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">Attacking MongoDB</a>
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">4、实际案例</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160417220029/http://www.wooyun.org/bugs/wooyun-2010-095976" title="http://www.wooyun.org/bugs/wooyun-2010-095976" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">百度某业务mongodb数据库未授权访问</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160417220029/http://www.wooyun.org/bugs/wooyun-2010-092643" title="http://www.wooyun.org/bugs/wooyun-2010-092643" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">酷我音乐MongoDB多个数据库未授权访问</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160417220029/http://www.wooyun.org/bugs/wooyun-2010-092511" title="http://www.wooyun.org/bugs/wooyun-2010-092511" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">酷狗繁星MongoDB数据库未授权访问</a>
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">5、修复方案</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<strong style="box-sizing:border-box;font-weight:700;">添加用户认证</strong>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+MongoDB 3.0以上的版本较以往版本做了一些调整，如：
+</p>
+<ul style="box-sizing:border-box;margin-top:0px;margin-bottom:10px;">
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;">在安装完成后show dbs时只可以看到一个local数据库，而admin是不存在的，需要我们自己创建；</div>
+</li>
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;">db.addUser(…)方法不再使用，添加用户需要使用db.createUser(…)方法等。</div>
+</li>
+</ul>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+在3.0以上版本：
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">use admin <span style="box-sizing:border-box;color:rgb(102, 102, 102);font-style:italic;">#进入admin数据库</span>
+db.createUser<span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>
+  <span style="box-sizing:border-box;color:rgb(102, 204, 102);">{</span>
+    user: <span style="box-sizing:border-box;color:rgb(255, 0, 0);">"root"</span>,
+    pwd: <span style="box-sizing:border-box;color:rgb(255, 0, 0);">"test"</span>,
+    roles: <span style="box-sizing:border-box;color:rgb(102, 204, 102);">[</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">{</span> role: <span style="box-sizing:border-box;color:rgb(255, 0, 0);">"userAdminAnyDatabase"</span>, db: <span style="box-sizing:border-box;color:rgb(255, 0, 0);">"admin"</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">}</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">]</span>
+  <span style="box-sizing:border-box;color:rgb(102, 204, 102);">}</span>
+<span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span> <span style="box-sizing:border-box;color:rgb(102, 102, 102);font-style:italic;">#添加用户名root，密码test的用户，若数据库未创建则会自动创建</span></pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+注意：roles 中的 db 参数是必须的，不然会报错：
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">Error: couldn’t add user: Missing expected field “db”。</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+这时我们就可以通过<code style="box-sizing:border-box;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;font-size:90%;padding:2px 4px;color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);border-radius:4px;">show users</code>或<code style="box-sizing:border-box;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;font-size:90%;padding:2px 4px;color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);border-radius:4px;">db.system.users.find()</code>命令看到刚才创建的用户了；
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+然后添加<code style="box-sizing:border-box;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;font-size:90%;padding:2px 4px;color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);border-radius:4px;">–auth</code>参数（开启用户权限）重启MongoDB；
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">use admin <span style="box-sizing:border-box;color:rgb(102, 102, 102);font-style:italic;">#进入admin数据库</span>
+db.auth<span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span><span style="box-sizing:border-box;color:rgb(255, 0, 0);">"root"</span>,<span style="box-sizing:border-box;color:rgb(255, 0, 0);">"test"</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span> <span style="box-sizing:border-box;color:rgb(102, 102, 102);font-style:italic;">#认证，成功返回1</span></pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+注意：这里的root帐号只有用户管理权限！
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+因为帐号、密码是跟着数据库走的，所以我们需要为数据库设置账号密码，例如下面是给test数据库添加了一个有读写权限的账号为：
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">use <span style="box-sizing:border-box;color:rgb(0, 0, 102);">test</span> <span style="box-sizing:border-box;color:rgb(102, 102, 102);font-style:italic;">#进入test数据库</span>
+db.createUser<span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>
+  <span style="box-sizing:border-box;color:rgb(102, 204, 102);">{</span>
+    user: <span style="box-sizing:border-box;color:rgb(255, 0, 0);">"test"</span>,
+    pwd: <span style="box-sizing:border-box;color:rgb(255, 0, 0);">"123456"</span>,
+    roles: <span style="box-sizing:border-box;color:rgb(102, 204, 102);">[</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">{</span> role: <span style="box-sizing:border-box;color:rgb(255, 0, 0);">"readWrite"</span>, db: <span style="box-sizing:border-box;color:rgb(255, 0, 0);">"test"</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">}</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">]</span>
+  <span style="box-sizing:border-box;color:rgb(102, 204, 102);">}</span>
+<span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span> <span style="box-sizing:border-box;color:rgb(102, 102, 102);font-style:italic;">#添加用户名test，密码123456的帐号，若数据库未创建则会自动创建</span></pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<strong style="box-sizing:border-box;font-weight:700;">限制连接IP</strong>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+在启动时可以通过添加–bind_ip参数来绑定IP，如进行下面的绑定后则只能够从本机访问：
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">.<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>mongod --bind_ip 127.0.0.1</pre>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">6、漏洞扫描与发现</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<strong style="box-sizing:border-box;font-weight:700;">半手动扫描</strong>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+使用nmap扫描Mongodb默认的服务端口（27017）或者默认的web端口（28017）：
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">nmap</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-n</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">--open</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-p</span> <span style="box-sizing:border-box;color:rgb(204, 102, 204);">27017</span> X.X.X.X<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span><span style="box-sizing:border-box;color:rgb(204, 102, 204);">24</span></pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+找到开放27017端口的主机后使用Mongodb管理工具（如：MongoVUE）进行连接。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">7、相关资源</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160417220029/http://www.mongodb.org/" title="http://www.mongodb.org/" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">mongodb官网</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160417220029/http://ibruce.info/2015/03/03/mongodb3-auth/" title="http://ibruce.info/2015/03/03/mongodb3-auth/" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">mongoDB 3.0 安全权限访问控制</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160417220029/http://docs.mongodb.org/manual/" title="http://docs.mongodb.org/manual/" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">mongodb官方教程</a>
+</p>
+
+</div>
+
+              
+
+                            
+            <span style="display:table;clear:both;"/></div></div></div></span></div></div></div></div></div><br/></div></body></html>

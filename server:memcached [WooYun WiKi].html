@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="exporter-version" content="Evernote Mac 6.8 (453748)"/><meta name="created" content="2016-10-19 12:39:28 +0000"/><meta name="source" content="web.clip"/><meta name="source-url" content="http://wiki.wooyun.org/server:memcached"/><meta name="updated" content="2016-10-19 12:39:28 +0000"/><title>server:memcached [WooYun WiKi]</title></head><body><div style="-evernote-webclip:true"><br/><div style="font-size: 16px"><div style="box-sizing:border-box;font-family:sans-serif;text-size-adjust:100%;font-size:10px;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);"><div style="box-sizing:border-box;font-family:&quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;font-size:small;line-height:1.42857;color:rgb(51, 51, 51);background:rgb(253, 253, 253);"><div style="box-sizing:border-box;"><div style="box-sizing:border-box;"><span style="box-sizing:border-box;"><div style="box-sizing:border-box;"><div style="box-sizing:border-box;background-color:rgb(255, 255, 255);border-radius:4px;box-shadow:rgba(0, 0, 0, 0.0470588) 0px 1px 1px;"><div style="box-sizing:border-box;"><span style="display:table;"/>
+
+                                          
+              <div style="box-sizing:border-box;position:fixed;float:right;z-index:1024;top:10px;right:10px;">
+                
+<div style="float:right;box-sizing:border-box;background-color:rgb(255, 255, 255);border-radius:4px;box-shadow:rgba(0, 0, 0, 0.0470588) 0px 1px 1px;border-color:rgb(221, 221, 221);border:1px solid transparent;margin:0px 0px 1.4em 1.4em;width:auto;color:inherit;font-size:0.95em;margin-left:20px;">
+<h3 style="border-bottom:1px solid transparent;box-sizing:border-box;border-top-left-radius:3px;font-weight:bold;color:rgb(51, 51, 51);border-color:rgb(221, 221, 221);background-color:rgb(245, 245, 245);font-family:inherit;line-height:1.1;border-top-right-radius:3px;padding:5px;font-size:0.95em;margin:0px;cursor:pointer;"><i style="box-sizing:border-box;position:relative;top:1px;display:inline-block;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;font-weight:400;line-height:1;-webkit-font-smoothing:antialiased;padding-right:5px;"><span style="font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;font-weight:400;line-height:1;"></span></i> <strong style="line-height:1;font-weight:400;top:1px;display:inline-block;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;position:relative;-webkit-font-smoothing:antialiased;box-sizing:border-box;float:right;margin:0px 0.2em;padding-right:5px;"><span style="font-weight:400;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;line-height:1;"></span></strong></h3>
+
+</div>
+
+              </div>
+
+              
+              
+<h1 style="box-sizing:border-box;font-size:36px;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin:40px 0px 20px;padding-bottom:9px;border-bottom:1px solid rgb(238, 238, 238);margin-top:10px;">Memcached安全配置</h1>
+<div style="box-sizing:border-box;"
+
+/>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">1、Memcached简介</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+Memcached是一个高性能的分布式的内存对象缓存系统，通过在内存里维护一个统一的巨大的hash表，它能够用来存储各种格式的数据，包括图像、视频、文件以及数据库检索的结果等。简单的说就是将数据调用到内存中，然后从内存中读取，从而大大提高读取速度。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+Memcached是danga的一个项目，由LiveJournal的Brad Fitzpatrick开发，最初为了加速 LiveJournal 访问速度而开发的，后来被很多大型的网站采用。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+Memcached是以守护程序方式运行于一个或多个服务器中，随时会接收客户端的连接和操作。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">2、Memcached服务器架设</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+安装memcached服务端
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">yum install</span> memcached</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+安装php扩展操作memcached
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">yum</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-y</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">install</span> php-pecl-memcache</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+查看php扩展是否安装成功
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">php <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-m</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">|</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">grep</span> memcache</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+启动memcached服务
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">memcached <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-d</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-m</span> <span style="box-sizing:border-box;color:rgb(204, 102, 204);">100</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-u</span> root <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-l</span> x.x.x.x <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-p</span> <span style="box-sizing:border-box;color:rgb(204, 102, 204);">11211</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-c</span> <span style="box-sizing:border-box;color:rgb(204, 102, 204);">512</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-P</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>tmp<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>memcached.pid</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+参数说明：
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">-d选项是启动一个守护进程；
+-m是分配给Memcache使用的内存数量，单位是MB，我这里是100MB；
+-u是运行Memcache的用户，我这里是root；
+-l是监听的服务器IP地址我这里指定了服务器的IP地址x.x.x.x；
+-p是设置Memcache监听的端口，我这里设置了<span style="box-sizing:border-box;color:rgb(204, 102, 204);">11211</span>，最好是<span style="box-sizing:border-box;color:rgb(204, 102, 204);">1024</span>以上的端口；
+-c选项是最大运行的并发连接数，默认是<span style="box-sizing:border-box;color:rgb(204, 102, 204);">1024</span>，我这里设置了<span style="box-sizing:border-box;color:rgb(204, 102, 204);">512</span>，按照你服务器的负载量来设定；
+-P是设置保存Memcache的pid文件，我这里是保存在 <span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>tmp<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>memcached.pid；</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+结束memcached进程
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">kill</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">`</span><span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">cat</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>tmp<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>memcached.pid<span style="box-sizing:border-box;color:rgb(102, 204, 102);">`</span></pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+设置memcached开机启动
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">chkconfig memcached on</pre>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">3、错误配置及利用</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+Memcached服务器端都是直接通过客户端连接后直接操作，没有任何的验证过程，且Mecached默认以root权限运行。因而如果Mecached服务器直接暴露在互联网上的话是比较危险，轻则造成敏感数据泄露，重则可导致服务器被入侵。
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">stats <span style="box-sizing:border-box;color:rgb(102, 102, 102);font-style:italic;">#显示memcached的运行状态</span>
+version <span style="box-sizing:border-box;color:rgb(102, 102, 102);font-style:italic;">#显示版本号</span>
+stats items <span style="box-sizing:border-box;color:rgb(102, 102, 102);font-style:italic;">#列出item</span>
+add key <span style="box-sizing:border-box;color:rgb(204, 102, 204);">0</span> <span style="box-sizing:border-box;color:rgb(204, 102, 204);">60</span> <span style="box-sizing:border-box;color:rgb(204, 102, 204);">5</span> <span style="box-sizing:border-box;color:rgb(102, 102, 102);font-style:italic;">#增加一个item名为key，存活时间60s，大小为5字节</span>
+<span style="box-sizing:border-box;color:rgb(204, 102, 204);">12345</span> <span style="box-sizing:border-box;color:rgb(102, 102, 102);font-style:italic;">#key的值</span>
+stats cachedump <span style="box-sizing:border-box;color:rgb(102, 204, 102);">&lt;</span>item: <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">id</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">&gt;</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">&lt;</span>返回结果数量,<span style="box-sizing:border-box;color:rgb(204, 102, 204);">0</span>代表返回全部<span style="box-sizing:border-box;color:rgb(102, 204, 102);">&gt;</span> <span style="box-sizing:border-box;color:rgb(102, 102, 102);font-style:italic;">#查看item信息</span>
+get key <span style="box-sizing:border-box;color:rgb(102, 102, 102);font-style:italic;">#取得key的值</span>
+delete key <span style="box-sizing:border-box;color:rgb(102, 102, 102);font-style:italic;">#删除key</span></pre>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">4、实际案例</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307184558/http://www.wooyun.org/bugs/wooyun-2010-0790" title="http://www.wooyun.org/bugs/wooyun-2010-0790" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">WooYun: memcached未作IP限制导致缓存数据可被攻击者控制</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307184558/http://www.wooyun.org/bugs/wooyun-2013-037301" title="http://www.wooyun.org/bugs/wooyun-2013-037301" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">WooYun: 通过Memcache缓存直接获取某物流网用户密码等敏感数据</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307184558/http://www.wooyun.org/bugs/wooyun-2013-023891" title="http://www.wooyun.org/bugs/wooyun-2013-023891" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">WooYun: 56.com memcached端口可以远程使用</a>
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">5、修复方案</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<strong style="box-sizing:border-box;font-weight:700;">限定访问的IP</strong>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+使用iptables限制访问IP,只允许IP为X.X.X.X的主机访问memcached：
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">iptables <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-F</span>
+iptables <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-P</span> INPUT DROP
+iptables <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-A</span> INPUT <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-p</span> tcp <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-s</span> X.X.X.X <span style="box-sizing:border-box;color:rgb(102, 0, 51);">--dport</span> <span style="box-sizing:border-box;color:rgb(204, 102, 204);">11211</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-j</span> ACCEPT
+iptables <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-A</span> INPUT <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-p</span> udp <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-s</span> X.X.X.X <span style="box-sizing:border-box;color:rgb(102, 0, 51);">--dport</span> <span style="box-sizing:border-box;color:rgb(204, 102, 204);">11211</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-j</span> ACCEPT</pre>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">6、漏洞扫描与发现</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<strong style="box-sizing:border-box;font-weight:700;">半手动扫描</strong>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+memcache默认是11211端口，可使用nmap扫描服务器的11211端口：
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">nmap</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-n</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">--open</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-p</span> <span style="box-sizing:border-box;color:rgb(204, 102, 204);">11211</span> X.X.X.X<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span><span style="box-sizing:border-box;color:rgb(204, 102, 204);">24</span>
+telnet X.X.X.X <span style="box-sizing:border-box;color:rgb(204, 102, 204);">11211</span>
+stats items</pre>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">7、相关资源</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307184558/http://memcached.org/" title="http://memcached.org/" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">memcached官网</a>
+</p>
+
+</div>
+
+              
+
+                            
+            <span style="display:table;clear:both;"/></div></div></div></span></div></div></div></div></div><br/></div></body></html>

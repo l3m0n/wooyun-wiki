@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="exporter-version" content="Evernote Mac 6.8 (453748)"/><meta name="created" content="2016-10-19 12:50:40 +0000"/><meta name="source" content="web.clip"/><meta name="source-url" content="http://wiki.wooyun.org/web:csrf"/><meta name="updated" content="2016-10-19 12:50:40 +0000"/><title>web:csrf [WooYun WiKi]</title></head><body><div style="-evernote-webclip:true"><br/><div style="font-size: 16px"><div style="box-sizing:border-box;font-family:sans-serif;text-size-adjust:100%;font-size:10px;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);"><div style="box-sizing:border-box;font-family:&quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;font-size:small;line-height:1.42857;color:rgb(51, 51, 51);background:rgb(253, 253, 253);"><div style="box-sizing:border-box;"><div style="box-sizing:border-box;"><span style="box-sizing:border-box;"><div style="box-sizing:border-box;"><div style="box-sizing:border-box;background-color:rgb(255, 255, 255);border-radius:4px;box-shadow:rgba(0, 0, 0, 0.0470588) 0px 1px 1px;"><div style="box-sizing:border-box;"><span style="display:table;"/>
+
+                                          
+              <div style="box-sizing:border-box;position:fixed;float:right;z-index:1024;top:10px;right:10px;">
+                
+<div style="float:right;box-sizing:border-box;background-color:rgb(255, 255, 255);border-radius:4px;box-shadow:rgba(0, 0, 0, 0.0470588) 0px 1px 1px;border-color:rgb(221, 221, 221);border:1px solid transparent;margin:0px 0px 1.4em 1.4em;width:auto;color:inherit;font-size:0.95em;margin-left:20px;">
+<h3 style="border-bottom:1px solid transparent;box-sizing:border-box;border-top-left-radius:3px;font-weight:bold;color:rgb(51, 51, 51);border-color:rgb(221, 221, 221);background-color:rgb(245, 245, 245);font-family:inherit;line-height:1.1;border-top-right-radius:3px;padding:5px;font-size:0.95em;margin:0px;cursor:pointer;"><i style="box-sizing:border-box;position:relative;top:1px;display:inline-block;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;font-weight:400;line-height:1;-webkit-font-smoothing:antialiased;padding-right:5px;"><span style="font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;font-weight:400;line-height:1;"></span></i> <strong style="line-height:1;font-weight:400;top:1px;display:inline-block;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;position:relative;-webkit-font-smoothing:antialiased;box-sizing:border-box;float:right;margin:0px 0.2em;padding-right:5px;"><span style="font-weight:400;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;line-height:1;"></span></strong></h3>
+
+</div>
+
+              </div>
+
+              
+              
+<h1 style="box-sizing:border-box;font-size:36px;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin:40px 0px 20px;padding-bottom:9px;border-bottom:1px solid rgb(238, 238, 238);margin-top:10px;">Cross-site Request Forgery/CSRF</h1>
+<div style="box-sizing:border-box;"
+
+/>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">1、相关背景介绍</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<strong style="box-sizing:border-box;font-weight:700;">跨站请求伪造（Cross-Site Request Forgery，CSRF）</strong>是一种使已登录用户在不知情的情况下执行某种动作的攻击。因为攻击者看不到伪造请求的响应结果，所以CSRF攻击主要用来执行动作，而非窃取用户数据。当受害者是一个普通用户时，CSRF可以实现在其不知情的情况下转移用户资金、发送邮件等操作；但是如果受害者是一个具有管理员权限的用户时CSRF则可能威胁到整个Web系统的安全。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">2、成因</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+由于开发人员对CSRF的了解不足，错把“经过认证的浏览器发起的请求”当成“经过认证的用户发起的请求”，当已认证的用户点击攻击者构造的恶意链接后就“被”执行了相应的操作。例如，一个银行的转账功能（将100元转到BOB的账上）是通过如下方式实现的：
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">GET http://bank.com/transfer.do?acct=BOB&amp;amount=100 HTTP/1.1</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+当攻击者MARIA诱导用户点击下面的链接时，如果该用户登录该银行网站的凭证尚未过期，那么他便在不知情的情况下转给了MARIA 100000元钱：
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">http://bank.com/transfer.do?acct=MARIA&amp;amount=100000</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+简单的身份验证只能保证请求发自某个用户的浏览器，却不能保证请求本身是用户自愿发出的。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">3、攻击方式及危害</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<strong style="box-sizing:border-box;font-weight:700;">GET型与POST型CSRF</strong>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+GET型与POST型CSRF主要取决于相应操作对提交方式的限制，其原理都是事先构造出一个恶意的请求，然后诱导用户点击或访问，从而假借用户身份完成相应的操作。另外，有些POST型CSRF也可能会利用javascript进行自动提交表单完成操作。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<strong style="box-sizing:border-box;font-weight:700;">Flash CSRF</strong>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+Flash CSRF通常是由于Crossdomain.xml文件配置不当造成的，利用方法是使用swf来发起跨站请求伪造，如:
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+Flash跨域权限管理文件设置为允许所有主机/域名跨域对本站进行读写数据：
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">This XML file does not appear to have any style information associated with it. The document tree is shown below.
+<span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;cross-domain-policy<span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span></span>
+    <span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;allow-access-from</span> <span style="box-sizing:border-box;color:rgb(0, 0, 255);">domain</span>=<span style="box-sizing:border-box;color:rgb(255, 0, 0);">"*"</span><span style="box-sizing:border-box;color:rgb(153, 51, 51);">/&gt;</span></span>
+<span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;/cross-domain-policy<span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span></span></pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+Flash跨域权限管理文件过滤规则不严(domain=”*”)，导致可以从其它任何域传Flash产生CSRF。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<strong style="box-sizing:border-box;font-weight:700;">CSRF蠕虫</strong>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+CSRF常见的危害是攻击者可以在用户不知情的情况下以用户的身份进行指定的操作，但实际上CSRF的危害远不止于此，经过特意构造的CSRF可以产生蠕虫的效果。如：某社区私信好友的接口和获取好友列表的接口都存在CSRF漏洞，攻击者就可以将其组合成一个CSRF蠕虫——当一个用户访问恶意页面后通过CSRF获取其好友列表信息，然后再利用私信好友的CSRF漏洞给其每个好友发送一条指向恶意页面的信息，只要有人查看这个信息里的链接，CSRF蠕虫就会不断传播下去，其可能造成的危害和影响非常巨大！
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">4、实际案例</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<strong style="box-sizing:border-box;font-weight:700;">VIP：WooYun-2013-27258：<a href="https://web.archive.org/web/20160417220046/http://www.wooyun.org/bugs/wooyun-2013-027258" title="http://www.wooyun.org/bugs/wooyun-2013-027258" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">http://www.wooyun.org/bugs/wooyun-2013-027258</a></strong>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+虽然请求是POST类型，但仍可以使用GET进行提交，因此，攻击者可以直接将恶意的请求链接放在img标签的src处。如用户登录时看到这张图就会执行相应的操作。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<strong style="box-sizing:border-box;font-weight:700;">blue：WooYun-2010-00780：<a href="https://web.archive.org/web/20160417220046/http://www.wooyun.org/bugs/wooyun-2010-0780" title="http://www.wooyun.org/bugs/wooyun-2010-0780" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">http://www.wooyun.org/bugs/wooyun-2010-0780</a></strong>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+该漏洞可导致用户点击攻击者构造的恶意页面后，在不知情的情况下将攻击者加入可访问的用户列表或空间访问密码被修改。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<strong style="box-sizing:border-box;font-weight:700;">VIP：WooYun-2013-26825：<a href="https://web.archive.org/web/20160417220046/http://www.wooyun.org/bugs/wooyun-2013-026825" title="http://www.wooyun.org/bugs/wooyun-2013-026825" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">http://www.wooyun.org/bugs/wooyun-2013-026825</a></strong>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+由于TP-LINK路由器内所有操作均为GET，且未对CSRF进行防御，因此导致攻击者可以利用CSRF漏洞实现如：修改DNS、关闭防火防火墙等重要操作。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">5、修复方案</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+因为攻击者获取不到伪造请求的响应结果，所以我们仅对那些会产生数据改变的服务进行重点防护即可，主要方式如下：
+</p>
+<ul style="box-sizing:border-box;margin-top:0px;margin-bottom:10px;">
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;"><strong style="box-sizing:border-box;font-weight:700;">验证HTTP Referer字段</strong>：
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+    在通常情况下，访问一个安全受限页面的请求来自于同一个网站， HTTP 头中的Referer字段记录了该 HTTP 请求的来源地址，如果Referer中的地址不是来源于本网站则可认为是不安全的请求，对于该请求应予以拒绝。
+<br style="box-sizing:border-box;"/>
+    这种方法简单易行，对于现有的系统只需在加上一个检查Referer值的过滤器，无需改变当前系统的任何已有代码和逻辑。
+<br style="box-sizing:border-box;"/>
+    但是，这种方法存在一些问题需要考虑：首先，Referer 的值是由浏览器提供的，虽然HTTP协议上有明确的要求，但是每个浏览器对于Referer的具体实现可能有差别，并且不能保证浏览器自身没有安全漏洞，将安全性交给第三方（即浏览器）保证，从理论上来讲是不可靠的；其次，用户可能会出于保护隐私等原因禁止浏览器提供Referer，这样的话正常的用户请求也可能因没有Referer信息被误判为不不安全的请求，无法提供正常的使用。
+<br style="box-sizing:border-box;"/>
+* <strong style="box-sizing:border-box;font-weight:700;">添加token</strong>：
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+    CSRF攻击之所以能够成功是因为攻击者可以伪造用户的请求，对此最好的防御手段就是让攻击者无法伪造这个请求。因此，我们可以在HTTP请求中以参数的形式添加一个随机的token，并在服务器端检查这个token是否正确，如不正确或不存在 ，则可以认为是不安全的请求，拒绝提供相关服务。
+<br style="box-sizing:border-box;"/>
+    注意：如果网站同时还存在xss漏洞时，上述token的方法将可能失效，因为xss可以模拟浏览器执行操作，攻击者通过xss漏洞读取token值后，便可以构造出合法的用户请求了。所以在做好CSRF防护的同时，相应的安全防护也应做好。
+</p>
+</div>
+</li>
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;"><strong style="box-sizing:border-box;font-weight:700;">添加验证码</strong>：
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+    在用户提交数据之前，让用户输入验证码，或者用户在进行关键操作时，让用户重新输入密码进行验证。
+<br style="box-sizing:border-box;"/>
+<br style="box-sizing:border-box;"/>
+<br style="box-sizing:border-box;"/>
+对于Flash CSRF要对站点根目录CrossDomain.xml跨域获取信息权限做好控制，精确到子域，例如：
+</p>
+</div>
+</li>
+</ul>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;?xml</span> <span style="box-sizing:border-box;color:rgb(0, 0, 255);">version</span>=<span style="box-sizing:border-box;color:rgb(255, 0, 0);">"1.0"</span><span style="box-sizing:border-box;color:rgb(153, 51, 51);">?&gt;</span></span>
+<span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;cross-domain-policy<span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span></span>
+    <span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;allow-access-from</span> <span style="box-sizing:border-box;color:rgb(0, 0, 255);">domain</span>=<span style="box-sizing:border-box;color:rgb(255, 0, 0);">"http://a.example.com"</span> <span style="box-sizing:border-box;color:rgb(0, 0, 255);">secure</span>=<span style="box-sizing:border-box;color:rgb(255, 0, 0);">"true”/&gt;</span></span>
+    <span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;allow-access-from</span> <span style="box-sizing:border-box;color:rgb(0, 0, 255);">domain</span>=<span style="box-sizing:border-box;color:rgb(255, 0, 0);">"http://b.example.com"</span> <span style="box-sizing:border-box;color:rgb(0, 0, 255);">secure</span>=<span style="box-sizing:border-box;color:rgb(255, 0, 0);">"true”/&gt;</span></span>
+<span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;/cross-domain-policy<span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span></span></pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+精确配置好信任域的同时，同时也要验证用户上传的文件内容，攻击者可以上传任意后缀但是内容为flash的文件继续进行CSRF攻击
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">6、漏洞扫描与发现</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+</div>
+
+<h4 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:10px;margin-bottom:10px;font-size:18px;">6.1 GET类型的CSRF的检测</h4>
+<div style="box-sizing:border-box;">
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+如果有token等验证参数，先去掉参数尝试能否正常请求。如果可以，即存在CSRF漏洞。
+</p>
+
+</div>
+
+<h4 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:10px;margin-bottom:10px;font-size:18px;">6.2 POST类型的CSRF的检测</h4>
+<div style="box-sizing:border-box;">
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+如果有token等验证参数，先去掉参数尝试能否正常请求。
+如果可以，再去掉referer参数的内容，如果仍然可以，说明存在CSRF漏洞，可以利用构造外部form表单的形式，实现攻击。
+如果直接去掉referer参数请求失败，这种还可以继续验证对referer的判断是否严格，是否可以绕过。
+一般用这种形式的进行判断，<a href="https://web.archive.org/web/20160417220046/http://wooyun.org.xxx.com/a/b.php" title="http://wooyun.org.xxx.com/a/b.php" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">http://wooyun.org.xxx.com/a/b.php</a> 或者 <a href="https://web.archive.org/web/20160417220046/http://xxx.com/?r=http://wooyun.org" title="http://xxx.com?r=http://wooyun.org" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">http://xxx.com?r=http://wooyun.org</a>
+这样如果对referer判断直接用的indexOf判断的话，或者正则表达式不够严格的情况，就可以被绕过从而形成CSRF攻击。
+</p>
+
+</div>
+
+<h4 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:10px;margin-bottom:10px;font-size:18px;">6.3 特殊情况的POST类型的CSRF检测</h4>
+<div style="box-sizing:border-box;">
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+如果上述post方式对referer验证的特别严格，有的时候由于程序员对请求类型判断不是很严格，可以导致post请求改写为get请求，从而CSRF。
+比如post请求为 <a href="https://web.archive.org/web/20160417220046/http://xxx.com/yy.php" title="http://xxx.com/yy.php" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">http://xxx.com/yy.php</a>   postdata为aa=xx1&amp;bb=xx2
+然后将请求改为  <a href="https://web.archive.org/web/20160417220046/http://xxx.comyy.php/?aa=xx1&amp;bb=xx2" title="http://xxx.comyy.php?aa=xx1&amp;bb=xx2" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">http://xxx.comyy.php?aa=xx1&amp;bb=xx2</a>  直接以get请求的方式进行访问，如果请求成功，即可以此种方式绕过对referer的检测，从而CSRF。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">7、相关其他安全问题</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+未知
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">8、相关资源</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160417220046/https://www.owasp.org/index.php/CSRF" title="https://www.owasp.org/index.php/CSRF" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">Cross-Site Request Forgery (CSRF)</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160417220046/http://zh.wikipedia.org/wiki/%E8%B7%A8%E7%AB%99%E8%AF%B7%E6%B1%82%E4%BC%AA%E9%80%A0" title="http://zh.wikipedia.org/wiki/%E8%B7%A8%E7%AB%99%E8%AF%B7%E6%B1%82%E4%BC%AA%E9%80%A0" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">跨站请求伪造</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160417220046/http://drops.wooyun.org/tips/688" title="http://drops.wooyun.org/tips/688" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">Flash CSRF</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160417220046/https://www.ibm.com/developerworks/cn/web/1102_niugang_csrf/" title="https://www.ibm.com/developerworks/cn/web/1102_niugang_csrf/" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">CSRF 攻击的应对之道</a>
+</p>
+
+</div>
+
+              
+
+                            
+            <span style="display:table;clear:both;"/></div></div></div></span></div></div></div></div></div><br/></div></body></html>

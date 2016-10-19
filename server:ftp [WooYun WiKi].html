@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="exporter-version" content="Evernote Mac 6.8 (453748)"/><meta name="created" content="2016-10-19 12:38:49 +0000"/><meta name="source" content="web.clip"/><meta name="source-url" content="http://wiki.wooyun.org/server:ftp"/><meta name="updated" content="2016-10-19 12:38:49 +0000"/><title>server:ftp [WooYun WiKi]</title></head><body><div style="-evernote-webclip:true"><br/><div style="font-size: 16px"><div style="box-sizing:border-box;font-family:sans-serif;text-size-adjust:100%;font-size:10px;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);"><div style="box-sizing:border-box;font-family:&quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;font-size:14px;line-height:1.42857;color:rgb(51, 51, 51);background-color:rgb(255, 255, 255);"><div style="box-sizing:border-box;"><div style="box-sizing:border-box;"><span style="box-sizing:border-box;"><div style="box-sizing:border-box;"><div style="box-sizing:border-box;background-color:rgb(255, 255, 255);border-radius:4px;box-shadow:rgba(0, 0, 0, 0.0470588) 0px 1px 1px;"><div style="box-sizing:border-box;"><span style="display:table;" />
+
+                                          
+              <div style="box-sizing:border-box;position:fixed;float:right;z-index:1024;top:10px;right:10px;">
+                
+<div style="box-sizing:border-box;margin-bottom:20px;background-color:rgb(255, 255, 255);border:1px solid transparent;border-radius:4px;box-shadow:rgba(0, 0, 0, 0.0470588) 0px 1px 1px;border-color:rgb(221, 221, 221);">
+<h3 style="font-size:24px;box-sizing:border-box;padding:10px 15px;font-weight:500;line-height:1.1;margin-top:20px;margin-bottom:10px;font-family:inherit;border-bottom:1px solid transparent;border-top-left-radius:3px;border-top-right-radius:3px;color:rgb(51, 51, 51);background-color:rgb(245, 245, 245);border-color:rgb(221, 221, 221);cursor:pointer;"><i style="box-sizing:border-box;position:relative;top:1px;display:inline-block;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;font-weight:400;line-height:1;-webkit-font-smoothing:antialiased;padding-right:5px;"><span style="font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;font-weight:400;line-height:1;"></span></i> <strong style="box-sizing:border-box;font-weight:400;position:relative;top:1px;display:inline-block;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;line-height:1;-webkit-font-smoothing:antialiased;"><span style="font-weight:400;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;line-height:1;"></span><span style="box-sizing:border-box;">+</span></strong></h3>
+
+</div>
+
+              </div>
+
+              
+              
+<h1 style="box-sizing:border-box;font-size:36px;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin:40px 0px 20px;padding-bottom:9px;border-bottom:1px solid rgb(238, 238, 238);">FTP服务器安全配置</h1>
+<div style="box-sizing:border-box;"
+
+/>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">1、FTP简介</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<abbr title="File Transfer Protocol" style="box-sizing:border-box;border-bottom:1px dotted rgb(119, 119, 119);cursor:help;">FTP</abbr> 是File Transfer Protocol（文件传输协议）的英文简称，而中文简称为“文传协议”。用于Internet上的控制文件的双向传输。同时，它也是一个应用程序（Application）。基于不同的操作系统有不同的FTP应用程序，而所有这些应用程序都遵守同一种协议以传输文件。在FTP的使用当中，用户经常遇到两个概念：“下载”（Download）和“上传”（Upload）。“下载”文件就是从远程主机拷贝文件至自己的计算机上；“上传”文件就是将文件从自己的计算机中拷贝至远程主机上。用Internet语言来说，用户可通过客户机程序向（从）远程主机上传（下载）文件。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">2、FTP服务器架设</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+测试环境 centos 6.6，ftp选择vsftp
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+安装vsftpd
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;">yum install</span> vsftpd <span style="box-sizing:border-box;">-y</span></pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+运行服务
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;">/</span>etc<span style="box-sizing:border-box;">/</span>init.d<span style="box-sizing:border-box;">/</span>vsftpd <span style="box-sizing:border-box;">-y</span></pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+初始安装完成，初始安装完成后允许任意用户直接登录，可以下载其中的文件
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">3、错误配置及利用</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+</div>
+
+<h4 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:10px;margin-bottom:10px;font-size:18px;">3.1 允许匿名用户直接登录,下载文件</h4>
+<div style="box-sizing:border-box;"
+
+/>
+
+<h4 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:10px;margin-bottom:10px;font-size:18px;">3.2 配置不当存在弱口令</h4>
+<div style="box-sizing:border-box;"
+
+/>
+
+<h4 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:10px;margin-bottom:10px;font-size:18px;">3.3 权限配置不当</h4>
+<div style="box-sizing:border-box;"
+
+/>
+
+<h4 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:10px;margin-bottom:10px;font-size:18px;">3.4 proFTPd 未授权的文件拷贝(CVE-2015-3306)</h4>
+<div style="box-sizing:border-box;">
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+在proFTPd版本小于1.3.5的条件下，登陆proftp后(未授权或者爆破)，使用cpfr和cpto，能够拷贝主机中得文件，如果在知道web目录的绝对情况下，有可能写入webshell
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+具体攻击方法参考
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20150608132420/http://zone.wooyun.org/content/19890" title="http://zone.wooyun.org/content/19890" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;">ProFTPd 1.3.5 - File Copy</a>
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">4、实际案例</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+</div>
+
+<h4 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:10px;margin-bottom:10px;font-size:18px;">4.1 FTP未授权访问</h4>
+<div style="box-sizing:border-box;">
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20150608132420/http://www.wooyun.org/bugs/wooyun-2010-0107341" title="http://www.wooyun.org/bugs/wooyun-2010-0107341" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;">武汉科技大学某处FTP未授权访问</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20150608132420/http://www.wooyun.org/bugs/wooyun-2010-0105901" title="http://www.wooyun.org/bugs/wooyun-2010-0105901" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;">中国海油FTP未授权导致大量数据泄露</a>
+</p>
+
+</div>
+
+<h4 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:10px;margin-bottom:10px;font-size:18px;">4.2 FTP弱口令</h4>
+<div style="box-sizing:border-box;">
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20150608132420/http://www.wooyun.org/bugs/wooyun-2010-0102552" title="http://www.wooyun.org/bugs/wooyun-2010-0102552" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;">长虹FTP弱口令可导致全网数据泄漏</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20150608132420/http://www.wooyun.org/bugs/wooyun-2010-0100787" title="http://www.wooyun.org/bugs/wooyun-2010-0100787" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;">KONKA康佳某系统服务器FTP弱口令</a>
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">5、修复方案</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+修复方案使用vsftp的配置文件作为标准
+</p>
+
+</div>
+
+<h4 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:10px;margin-bottom:10px;font-size:18px;">5.1 禁止匿名访问</h4>
+<div style="box-sizing:border-box;">
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;">vim</span> <span style="box-sizing:border-box;">/</span>etc<span style="box-sizing:border-box;">/</span>vsftpd<span style="box-sizing:border-box;">/</span>vsftpd.conf
+<span style="box-sizing:border-box;">anonymous_enable</span>=NO</pre>
+
+</div>
+
+<h4 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:10px;margin-bottom:10px;font-size:18px;">5.2 增强口令强度</h4>
+<div style="box-sizing:border-box;">
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+避免弱口令
+</p>
+
+</div>
+
+<h4 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:10px;margin-bottom:10px;font-size:18px;">5.3 进行访问限制</h4>
+<div style="box-sizing:border-box;">
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+使用iptables做ACL
+FTP分为主动式和被动式，书写防火墙规则是要注意
+</p>
+
+</div>
+
+<h5 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:10px;margin-bottom:10px;font-size:14px;">5.3.1 主动式</h5>
+<div style="box-sizing:border-box;">
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">iptables <span style="box-sizing:border-box;">-A</span> INPUT <span style="box-sizing:border-box;">-m</span> state <span style="box-sizing:border-box;">--state</span> ESTABLISHED,RELATED <span style="box-sizing:border-box;">-j</span> ACCEPT
+iptables <span style="box-sizing:border-box;">-A</span> INPUT <span style="box-sizing:border-box;">-p</span> tcp  <span style="box-sizing:border-box;">-m</span> multiport <span style="box-sizing:border-box;">--dport</span> <span style="box-sizing:border-box;">20</span>,<span style="box-sizing:border-box;">21</span>  <span style="box-sizing:border-box;">-m</span> state <span style="box-sizing:border-box;">--state</span> NEW <span style="box-sizing:border-box;">-j</span> ACCEPT</pre>
+
+</div>
+
+<h5 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:10px;margin-bottom:10px;font-size:14px;">5.3.2 被动式</h5>
+<div style="box-sizing:border-box;">
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;">vim</span> <span style="box-sizing:border-box;">/</span>etc<span style="box-sizing:border-box;">/</span>modprobe.conf
+<span style="box-sizing:border-box;">alias</span> ip_conntrack ip_conntract_ftp ip_nat_ftp 
+<span style="box-sizing:border-box;">vim</span> <span style="box-sizing:border-box;">/</span>etc<span style="box-sizing:border-box;">/</span>rc.local
+<span style="box-sizing:border-box;">/</span>sbin<span style="box-sizing:border-box;">/</span>modprobe ip_conntract
+<span style="box-sizing:border-box;">/</span>sbin<span style="box-sizing:border-box;">/</span>modprobe ip_conntrack_ftp
+<span style="box-sizing:border-box;">/</span>sbin<span style="box-sizing:border-box;">/</span>modprobe ip_nat_ftp</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+假设vsftpd.conf中得相关配置如下
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;">pasv_enable</span>=YES
+<span style="box-sizing:border-box;">pasv_min_port</span>=<span style="box-sizing:border-box;">2222</span>
+<span style="box-sizing:border-box;">pasv_max_port</span>=<span style="box-sizing:border-box;">2225</span></pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+防火墙规则可写为
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">iptables <span style="box-sizing:border-box;">-A</span> INPUT <span style="box-sizing:border-box;">-m</span> state <span style="box-sizing:border-box;">--state</span> RELATED,ESTABLISHED <span style="box-sizing:border-box;">-j</span> ACCEPT
+iptables <span style="box-sizing:border-box;">-A</span> INPUT <span style="box-sizing:border-box;">-p</span> tcp <span style="box-sizing:border-box;">-m</span> state <span style="box-sizing:border-box;">--state</span> NEW <span style="box-sizing:border-box;">-m</span> tcp <span style="box-sizing:border-box;">--dport</span> <span style="box-sizing:border-box;">21</span> <span style="box-sizing:border-box;">-j</span> ACCEPT
+iptables <span style="box-sizing:border-box;">-A</span> INPUT <span style="box-sizing:border-box;">-p</span> tcp <span style="box-sizing:border-box;">--dport</span> <span style="box-sizing:border-box;">2222</span>:<span style="box-sizing:border-box;">2225</span> <span style="box-sizing:border-box;">-j</span> ACCEPT</pre>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">6、漏洞扫描与发现</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+先使用nmap对21端口的开放情况进行扫描，然后使用hydra或者medusa进行登陆验证或者暴力破解
+端口扫描
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;">nmap</span> <span style="box-sizing:border-box;">-Pn</span> <span style="box-sizing:border-box;">-p21</span> <span style="box-sizing:border-box;">ip</span></pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+登陆验证或者端口扫描
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">medusa <span style="box-sizing:border-box;">-H</span> ip.txt <span style="box-sizing:border-box;">-U</span> user.txt <span style="box-sizing:border-box;">-P</span> passwd.txt <span style="box-sizing:border-box;">-M</span> <span style="box-sizing:border-box;">ftp</span>
+<span style="box-sizing:border-box;">#hydra不支持批量的导入</span>
+hydra <span style="box-sizing:border-box;">-L</span> username.txt <span style="box-sizing:border-box;">-P</span> passwd.txt  ftp:<span style="box-sizing:border-box;">//</span><span style="box-sizing:border-box;">ip</span></pre>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">7、相关资源</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20150608132420/https://security.appspot.com/vsftpd.html" title="https://security.appspot.com/vsftpd.html" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;">vsftpd官网</a>
+</p>
+
+</div>
+
+              
+
+                            
+            <span style="display:table;clear:both;" /></div></div></div></span></div></div></div></div></div><br/></div></body></html>

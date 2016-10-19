@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="exporter-version" content="Evernote Mac 6.8 (453748)"/><meta name="created" content="2016-10-19 12:39:20 +0000"/><meta name="source" content="web.clip"/><meta name="source-url" content="http://wiki.wooyun.org/server:mssql"/><meta name="updated" content="2016-10-19 12:39:20 +0000"/><title>server:mssql [WooYun WiKi]</title></head><body><div style="-evernote-webclip:true"><br/><div style="font-size: 16px"><div style="box-sizing:border-box;font-family:sans-serif;text-size-adjust:100%;font-size:10px;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);"><div style="box-sizing:border-box;font-family:&quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;font-size:small;line-height:1.42857;color:rgb(51, 51, 51);background:rgb(253, 253, 253);"><div style="box-sizing:border-box;"><div style="box-sizing:border-box;"><span style="box-sizing:border-box;"><div style="box-sizing:border-box;"><div style="box-sizing:border-box;background-color:rgb(255, 255, 255);border-radius:4px;box-shadow:rgba(0, 0, 0, 0.0470588) 0px 1px 1px;"><div style="box-sizing:border-box;"><span style="display:table;"/>
+
+                                          
+              <div style="box-sizing:border-box;float:right;z-index:1024;top:10px;right:10px;">
+                
+<div style="float:right;box-sizing:border-box;background-color:rgb(255, 255, 255);border-radius:4px;box-shadow:rgba(0, 0, 0, 0.0470588) 0px 1px 1px;border-color:rgb(221, 221, 221);border:1px solid transparent;margin:0px 0px 1.4em 1.4em;width:auto;color:inherit;font-size:0.95em;margin-left:20px;">
+<h3 style="border-bottom:1px solid transparent;box-sizing:border-box;border-top-left-radius:3px;font-weight:bold;color:rgb(51, 51, 51);border-color:rgb(221, 221, 221);background-color:rgb(245, 245, 245);font-family:inherit;line-height:1.1;border-top-right-radius:3px;padding:5px;font-size:0.95em;margin:0px;cursor:pointer;"><i style="box-sizing:border-box;position:relative;top:1px;display:inline-block;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;font-weight:400;line-height:1;-webkit-font-smoothing:antialiased;padding-right:5px;"><span style="font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;font-weight:400;line-height:1;"></span></i> <strong style="line-height:1;font-weight:400;top:1px;display:inline-block;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;position:relative;-webkit-font-smoothing:antialiased;box-sizing:border-box;float:right;margin:0px 0.2em;padding-right:5px;"><span style="font-weight:400;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;line-height:1;"></span></strong></h3>
+
+</div>
+
+              </div>
+
+              
+              
+<h1 style="box-sizing:border-box;font-size:36px;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin:40px 0px 20px;padding-bottom:9px;border-bottom:1px solid rgb(238, 238, 238);margin-top:10px;">MSSQL安全配置</h1>
+<div style="box-sizing:border-box;"
+
+/>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">1、MSSQL简介</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+Microsoft SQL Server是由美国微软公司所推出的关系数据库解决方案。 数据库的内置语言原本是采用美国标准局（ANSI）和国际标准组织（ISO）所定义的SQL语言，但是微软公司对它进行了部分扩充而成为作业用SQL（Transact-SQL）。 
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+SQL Server一开始并不是微软自己研发的产品，而是当时为了要和IBM竞争时，与Sybase合作所产生的，其最早的发展者是Sybase，同时微软也和Sybase合作过SQL Server 4.2版本的研发，微软亦将SQL Server 4.2移植到Windows NT（当时为3.1版），在与Sybase终止合作关系后，自力开发出SQL Server 6.0版，往后的SQL Server即均由微软自行研发。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+在与微软终止合作关系后，Sybase在Windows NT上的数据库产品原本称为Sybase SQL Server，后来改为现在的Sybase Adaptive Server Enterprise。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">2、MSSQL服务器架设</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+Mssql试用版的下载地址可在<a href="https://web.archive.org/web/20160307183752/https://www.microsoft.com/zh-cn/server-cloud/products/sql-server/Try.aspx" title="https://www.microsoft.com/zh-cn/server-cloud/products/sql-server/Try.aspx" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">Mssql试用版官方下载地址</a>找到。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+Mssql的安装有使用安装向导进行安装还有使用命令行进行安装两种方法，具体安装方法请参见官方文档。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+使用安装向导的请参见<a href="https://web.archive.org/web/20160307183752/https://technet.microsoft.com/zh-cn/library/ms143219(v=sql.110)" title="https://technet.microsoft.com/zh-cn/library/ms143219(v=sql.110)" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">使用安装向导安装 SQL Server 2012（安装程序）</a>。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+使用命令行进行安装请参见<a href="https://web.archive.org/web/20160307183752/https://technet.microsoft.com/zh-cn/library/ms144259(v=sql.110)" title="https://technet.microsoft.com/zh-cn/library/ms144259(v=sql.110)" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">从命令提示符安装 SQL Server 2012</a>。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">3、错误配置及利用</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<strong style="box-sizing:border-box;font-weight:700;">使用了旧版本的Mssql</strong>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+Mssql并不是一款免费的数据库解决方案，许多网站所使用的都不是最新版本的Mssql数据库，这些旧版本中存在着许多公开的漏洞，威胁着服务器的安全。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<strong style="box-sizing:border-box;font-weight:700;">sa用户弱口令且Mssql端口对外开放</strong>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+Mssql默认端口为1433端口，当该端口对外开放时，攻击者便可尝试对Mssql的账号密码进行爆破，此时若服务器使用了常用的用户名（如administrator）或默认用户名（Mssql默认用户为sa）且密码为弱口令或者默认的空口令则极易造成服务器被攻击者登陆，并进一步利用。参考<a href="https://web.archive.org/web/20160307183752/http://drops.wooyun.org/tips/1620" title="http://drops.wooyun.org/tips/1620" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">MSSQL注射知识库 v 1.0</a>中MSSQL 2000密码破解部分的内容。在攻击者获取到Mssql服务器数据库操作权限的时候服务器中缺少对用户权限的限制就极易导致服务器沦陷，参考<a href="https://web.archive.org/web/20160307183752/http://drops.wooyun.org/tips/1620" title="http://drops.wooyun.org/tips/1620" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">MSSQL注射知识库 v 1.0</a>中Get WebShell和系统命令执行部分的内容。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<strong style="box-sizing:border-box;font-weight:700;">启用了xp_cmdshell等危险扩展命令</strong>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+Mssql中有许多类似于xp_cmdshell的扩展命令，当攻击者获取到Mssql的数据库操作权限时，这些扩展命令非常容易被攻击者利用，最终导致服务器沦陷。因此，在使用Mssql时应尽量禁用这些扩展命令。常被利用的扩展命令有
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">Sp_OACreate
+Sp_OADestroy
+Sp_OAGetErrorInfo
+Sp_OAGetProperty
+Sp_OAMethod
+Sp_OASetProperty
+Sp_OAStop
+Xp_regaddmultistring
+Xp_regdeletekey
+Xp_regdeletevalue
+Xp_regenumvalues
+Xp_regremovemultistring
+xp_sdidebug
+xp_availablemedia
+xp_cmdshell
+xp_deletemail
+xp_dirtree
+xp_dropwebtask
+xp_dsninfo
+xp_enumdsn
+xp_enumerrorlogs
+xp_enumgroups
+xp_enumqueuedtasks
+xp_eventlog
+xp_findnextmsg
+xp_fixeddrives
+xp_getfiledetails
+xp_getnetname
+xp_grantlogin
+xp_logevent
+xp_loginconfig
+xp_logininfo
+xp_makewebtask
+xp_msver
+xp_perfend
+xp_perfmonitor
+xp_perfsample
+xp_perfstart
+xp_readerrorlog
+xp_readmail
+xp_revokelogin
+xp_runwebtask
+xp_schedulersignal
+xp_sendmail
+xp_servicecontrol
+xp_snmp_getstate
+xp_snmp_raisetrap
+xp_sprintf
+xp_sqlinventory
+xp_sqlregister
+xp_sqltrace
+xp_sscanf
+xp_startmail
+xp_stopmail
+xp_subdirs
+xp_unc_to_drive
+xp_dirtree</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+以下是使用xp_cmdshell执行系统命令的示例：
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">exec xp_cmdshell 'whoami'</pre>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">4、实际案例</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307183752/http://www.wooyun.org/bugs/wooyun-2015-0104036" title="http://www.wooyun.org/bugs/wooyun-2015-0104036" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">四川烟草网MSSQL遇SA权限能执行0S-SHELL成功提权服务器（可内网渗透）</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307183752/http://www.wooyun.org/bugs/wooyun-2014-061080" title="http://www.wooyun.org/bugs/wooyun-2014-061080" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">用友协作办公平台再次通杀SQL注入</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307183752/http://www.wooyun.org/bugs/wooyun-2010-0109828" title="http://www.wooyun.org/bugs/wooyun-2010-0109828" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">青岛科技大学某系统后台post注入</a>
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">5、修复方案</h3>
+<div style="box-sizing:border-box;">
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<strong style="box-sizing:border-box;font-weight:700;">使用了旧版本的Mssql</strong>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+升级Mssql，或者使用其他的数据库解决方案。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<strong style="box-sizing:border-box;font-weight:700;">sa用户弱口令且Mssql端口对外开放</strong>
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">#查看口令为空的用户 
+<span style="box-sizing:border-box;color:rgb(177, 177, 0);">SELECT</span> <span style="box-sizing:border-box;color:rgb(102, 204, 102);">*</span> <span style="box-sizing:border-box;color:rgb(177, 177, 0);">FROM</span> sysusers
+<span style="box-sizing:border-box;color:rgb(177, 177, 0);">SELECT</span> name<span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span>Password <span style="box-sizing:border-box;color:rgb(177, 177, 0);">FROM</span> syslogins <span style="box-sizing:border-box;color:rgb(177, 177, 0);">WHERE</span> password <span style="box-sizing:border-box;color:rgb(177, 177, 0);">IS</span> <span style="box-sizing:border-box;color:rgb(177, 177, 0);">NULL</span> <span style="box-sizing:border-box;color:rgb(177, 177, 0);">ORDER</span> <span style="box-sizing:border-box;color:rgb(177, 177, 0);">BY</span> name
+ 
+#更改口令
+<span style="box-sizing:border-box;color:rgb(177, 177, 0);">USE</span> master <span style="box-sizing:border-box;color:rgb(177, 177, 0);">EXEC</span> sp_password ‘旧口令’，‘新口令’<span style="box-sizing:border-box;color:rgb(102, 204, 102);">,</span>用户名</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+管理用户权限：
+</p>
+<ol style="box-sizing:border-box;margin-top:0px;margin-bottom:10px;">
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;"> 企业管理器-〉数据库-〉对应数据库-〉角色-中创建新角色；</div>
+</li>
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;"> 调整角色属性中的权限，赋予角色中拥有对象对应的SELECT、INSERT、UPDATE、DELETE、EXEC、DRI权限</div>
+</li>
+</ol>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<strong style="box-sizing:border-box;font-weight:700;">启用了xp_cmdshell等危险扩展命令</strong>
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">#删除xp_cmdshell扩展命令，删除其它扩展命令同理
+<span style="box-sizing:border-box;color:rgb(177, 177, 0);">USE</span> master  sp_dropextendedproc <span style="box-sizing:border-box;color:rgb(255, 0, 0);">'xp_cmdshell'</span> </pre>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">6、漏洞扫描及发现</h3>
+<div style="box-sizing:border-box;">
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+Mssql默认端口为1433，当数据库允许远程连接时该端口会对外开放。 通过对1433端口进行扫描就可以找到对外开放的Mssql服务器。
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>扫描
+<span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">nmap</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-n</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">--open</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-p</span> <span style="box-sizing:border-box;color:rgb(204, 102, 204);">1433</span> X.X.X.X<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span><span style="box-sizing:border-box;color:rgb(204, 102, 204);">24</span>
+ 
+<span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>使用<span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">nmap</span>进行暴力破解
+<span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">nmap</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-p1433</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">--script</span>=ms-sql-brute <span style="box-sizing:border-box;color:rgb(102, 0, 51);">--script-args</span>=<span style="box-sizing:border-box;color:rgb(153, 51, 51);">userdb</span>=<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>var<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span><span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">passwd</span>,<span style="box-sizing:border-box;color:rgb(153, 51, 51);">passdb</span>=<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>var<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span><span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">passwd</span> 192.168.5.1</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+找到开放1433端口的服务器后便可尝试用Mssql数据库管理工具进行连接。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">7、相关资源</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307183752/https://www.microsoft.com/zh-cn/server-cloud/products/sql-server/Try.aspx" title="https://www.microsoft.com/zh-cn/server-cloud/products/sql-server/Try.aspx" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">Mssql试用版官方下载地址</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307183752/https://technet.microsoft.com/zh-cn/library/ms143219(v=sql.110)" title="https://technet.microsoft.com/zh-cn/library/ms143219(v=sql.110)" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">使用安装向导安装 SQL Server 2012（安装程序）</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307183752/https://technet.microsoft.com/zh-cn/library/ms144259(v=sql.110)" title="https://technet.microsoft.com/zh-cn/library/ms144259(v=sql.110)" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">从命令提示符安装 SQL Server 2012</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307183752/http://drops.wooyun.org/tips/1670" title="http://drops.wooyun.org/tips/1670" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">SQL SERVER 2008安全配置</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160307183752/http://drops.wooyun.org/tips/1620" title="http://drops.wooyun.org/tips/1620" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">MSSQL注射知识库 v 1.0</a>
+</p>
+
+</div>
+
+              
+
+                            
+            <span style="display:table;clear:both;"/></div></div></div></span></div></div></div></div></div><br/></div></body></html>

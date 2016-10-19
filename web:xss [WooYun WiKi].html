@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta name="exporter-version" content="Evernote Mac 6.8 (453748)"/><meta name="created" content="2016-10-19 12:46:33 +0000"/><meta name="source" content="web.clip"/><meta name="source-url" content="https://web.archive.org/web/20160413024819/http://wiki.wooyun.org/web:xss"/><meta name="updated" content="2016-10-19 12:46:33 +0000"/><title>web:xss [WooYun WiKi]</title></head><body><div style="-evernote-webclip:true"><br/><div style="font-size: 16px"><div style="box-sizing:border-box;font-family:sans-serif;text-size-adjust:100%;font-size:10px;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);"><div style="box-sizing:border-box;font-family:&quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;font-size:small;line-height:1.42857;color:rgb(51, 51, 51);background:rgb(253, 253, 253);"><div style="box-sizing:border-box;"><div style="box-sizing:border-box;"><span style="box-sizing:border-box;"><div style="box-sizing:border-box;"><div style="box-sizing:border-box;background-color:rgb(255, 255, 255);border-radius:4px;box-shadow:rgba(0, 0, 0, 0.0470588) 0px 1px 1px;"><div style="box-sizing:border-box;"><span style="display:table;"/>
+
+                                          
+              <div style="box-sizing:border-box;position:fixed;float:right;z-index:1024;top:10px;right:10px;">
+                
+<div style="float:right;box-sizing:border-box;background-color:rgb(255, 255, 255);border-radius:4px;box-shadow:rgba(0, 0, 0, 0.0470588) 0px 1px 1px;border-color:rgb(221, 221, 221);border:1px solid transparent;margin:0px 0px 1.4em 1.4em;width:auto;color:inherit;font-size:0.95em;margin-left:20px;">
+<h3 style="border-bottom:1px solid transparent;box-sizing:border-box;border-top-left-radius:3px;font-weight:bold;color:rgb(51, 51, 51);border-color:rgb(221, 221, 221);background-color:rgb(245, 245, 245);font-family:inherit;line-height:1.1;border-top-right-radius:3px;padding:5px;font-size:0.95em;margin:0px;cursor:pointer;"><i style="box-sizing:border-box;position:relative;top:1px;display:inline-block;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;font-weight:400;line-height:1;-webkit-font-smoothing:antialiased;padding-right:5px;"><span style="font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;font-weight:400;line-height:1;"></span></i> <strong style="line-height:1;font-weight:400;top:1px;display:inline-block;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;position:relative;-webkit-font-smoothing:antialiased;box-sizing:border-box;float:right;margin:0px 0.2em;padding-right:5px;"><span style="font-weight:400;font-family:&quot;Glyphicons Halflings&quot;;font-style:normal;line-height:1;"></span></strong></h3>
+
+</div>
+
+              </div>
+
+              
+              
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+﻿
+</p>
+
+<h1 style="box-sizing:border-box;font-size:36px;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin:40px 0px 20px;padding-bottom:9px;border-bottom:1px solid rgb(238, 238, 238);margin-top:10px;">XSS(cross site scripting)</h1>
+<div style="box-sizing:border-box;"
+
+/>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">1、相关背景介绍</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+跨站脚本攻击(Cross Site Scripting)，为不和层叠样式表(Cascading Style Sheets, <abbr title="Cascading Style Sheets" style="box-sizing:border-box;border-bottom:1px dotted rgb(119, 119, 119);cursor:help;">CSS</abbr>)的缩写混淆，故将跨站脚本攻击缩写为XSS。恶意攻击者往Web页面里插入恶意html代码，当用户浏览该页之时，嵌入其中Web里面的html代码会被执行，从而达到恶意攻击用户的特殊目的。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">2、成因</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+造成XSS漏洞的原因就是，攻击者的输入没有经过严格的控制，最终显示给来访的用户，攻击者通过巧妙的方法注入恶意指令代码到网页，使用户加载并执行攻击者恶意制造的网页程序。这些恶意网页程序通常是JavaScript，但实际上也可以包括Java， VBScript， ActiveX， Flash 或者甚至是普通的HTML。攻击成功后，攻击者可能得到更高的权限（如执行一些操作）、个人网页内容、会话和cookie等各种内容。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">3、攻击方式及危害</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+XSS攻击方式通常分为三大类：
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+反射型XSS
+存储型XSS
+DOM型XSS
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+但实际上还存在flash XSS以及一个比较新的概念mXSS，下面分别来介绍一下：
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+反射型XSS，非持久化，需要欺骗用户自己去点击链接才能触发XSS代码（服务器中没有这样的页面和内容）。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+存储型XSS，持久化，代码是存储在服务器中的，如在个人信息或发表文章等地方，加入代码，如果没有过滤或过滤不严，那么这些代码将储存到服务器中，用户访问该页面的时候触发代码执行。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+DOM型XSS，DOM—based XSS漏洞是基于文档对象模型Document Objeet Model，DOM)的一种漏洞。DOM是一个与平台、编程语言无关的接口，它允许程序或脚本动态地访问和更新文档内容、结构和样式，处理后的结果能够成为显示页面的一部分。DOM中有很多对象，其中一些是用户可以操纵的，如uRI ，location，refelTer等。客户端的脚本程序可以通过DOM动态地检查和修改页面内容，它不依赖于提交数据到服务器端，而从客户端获得DOM中的数据在本地执行，如果DOM中的数据没有经过严格确认，就会产生DOM—based XSS漏洞。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+flash XSS，利用网页上flash文件的缺陷来执行js脚本，一般是反射型XSS。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+mXSS，又被叫做突变XSS，主要被用于绕过XSS过滤。用户所提供的富文本内容通过javascript代码进入innerHTML属性后，一些意外的变化会使得一串看似没有任何危害的HTML代码，最终将进入某个DOM节点的innerHTML中，浏览器的渲染引擎会将本来没有任何危害的HTML代码渲染成具有潜在危险的XSS攻击代码。随后，该段攻击代码可能会被JS代码中的其它一些流程输出到DOM中或是其它方式被再次渲染，从而导致XSS的执行。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+XSS可以在访问了被插入XSS页面的用户的浏览器上执行js，从而进行一系列的操作。常见的攻击方式主要是利用XSS盗取用户未受httponly保护的cookie，再使用盗取的cookie登陆服务器进行操作。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+XSS常与CSRF漏洞结合起来使用，可在用户不知不觉中用用户的账号进行转账，加关注等操作。CSRF漏洞参见<a href="https://web.archive.org/web/20160413024819/http://wiki.wooyun.org/web:csrf" title="web:csrf" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;">Cross-site Request Forgery/CSRF</a>。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+其它一些少见的利用方式包括利用XSS进行DDOS，参考：<a href="https://web.archive.org/web/20160413024819/http://zone.wooyun.org/content/12009" title="http://zone.wooyun.org/content/12009" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">SOHU视频XSS漏洞导致其用户成为DDOS肉鸡</a>。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">4、实际案例</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+Dom XSS案例
+</p>
+<ul style="box-sizing:border-box;margin-top:0px;margin-bottom:10px;">
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;"><a href="https://web.archive.org/web/20160413024819/http://www.wooyun.org/bugs/wooyun-2010-019556" title="http://www.wooyun.org/bugs/wooyun-2010-019556" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">淘宝主域名下多处Dom XSS</a></div>
+</li>
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;"><a href="https://web.archive.org/web/20160413024819/http://www.wooyun.org/bugs/wooyun-2010-015530" title="http://www.wooyun.org/bugs/wooyun-2010-015530" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">腾讯微博一处两用DOM-XSS，能反射，能后门</a></div>
+</li>
+</ul>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+存储型XSS案例
+</p>
+<ul style="box-sizing:border-box;margin-top:0px;margin-bottom:10px;">
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;"><a href="https://web.archive.org/web/20160413024819/http://www.wooyun.org/bugs/wooyun-2010-020713" title="http://www.wooyun.org/bugs/wooyun-2010-020713" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">腾讯群空间存储型XSS</a></div>
+</li>
+</ul>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+反射型XSS案例
+</p>
+<ul style="box-sizing:border-box;margin-top:0px;margin-bottom:10px;">
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;"><a href="https://web.archive.org/web/20160413024819/http://www.wooyun.org/bugs/wooyun-2010-0103570" title="http://www.wooyun.org/bugs/wooyun-2010-0103570" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">新浪微博存在多处反射型XSS漏洞（firefox、chrome均可触发）</a></div>
+</li>
+</ul>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+mXSS案例
+</p>
+<ul style="box-sizing:border-box;margin-top:0px;margin-bottom:10px;">
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;"><a href="https://web.archive.org/web/20160413024819/http://www.wooyun.org/bugs/wooyun-2010-051536" title="http://www.wooyun.org/bugs/wooyun-2010-051536" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">QQ空间某功能缺陷导致日志存储型XSS - 15</a></div>
+</li>
+</ul>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+flash XSS案例
+</p>
+<ul style="box-sizing:border-box;margin-top:0px;margin-bottom:10px;">
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;"><a href="https://web.archive.org/web/20160413024819/http://www.wooyun.org/bugs/wooyun-2014-057368" title="http://www.wooyun.org/bugs/wooyun-2014-057368" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">乌云主站存在一处反射型XSS漏洞</a></div>
+</li>
+</ul>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+flash XSS+存储型XSS案例
+</p>
+<ul style="box-sizing:border-box;margin-top:0px;margin-bottom:10px;">
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;"><a href="https://web.archive.org/web/20160413024819/http://www.wooyun.org/bugs/wooyun-2010-09732" title="http://www.wooyun.org/bugs/wooyun-2010-09732" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">百度首页Xss后门-可对用户进行持久劫持</a></div>
+</li>
+</ul>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+XSS过滤绕过案例
+</p>
+<ul style="box-sizing:border-box;margin-top:0px;margin-bottom:10px;">
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;"><a href="https://web.archive.org/web/20160413024819/http://www.wooyun.org/bugs/wooyun-2010-019578" title="http://www.wooyun.org/bugs/wooyun-2010-019578" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">新浪邮箱邮件正文XSS - 富文本过滤策略绕过</a></div>
+</li>
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;"><a href="https://web.archive.org/web/20160413024819/http://www.wooyun.org/bugs/wooyun-2010-0113343" title="http://www.wooyun.org/bugs/wooyun-2010-0113343" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">bilibili某子站存在反射型XSS漏洞可成功获取用户权限（XSS auditor bypass技巧）</a></div>
+</li>
+</ul>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+心伤的瘦子@wooyun 的XSS实例教程
+</p>
+<ul style="box-sizing:border-box;margin-top:0px;margin-bottom:10px;">
+<li style="box-sizing:border-box;"><div style="box-sizing:border-box;"> <a href="https://web.archive.org/web/20160413024819/http://wooyun.org/whitehats/%E5%BF%83%E4%BC%A4%E7%9A%84%E7%98%A6%E5%AD%90" title="http://wooyun.org/whitehats/%E5%BF%83%E4%BC%A4%E7%9A%84%E7%98%A6%E5%AD%90" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">[腾讯实例教程] 那些年我们一起学XSS</a></div>
+</li>
+</ul>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">5、修复方案</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+对XSS的防御需要根据实际情况对用户的输入进行严格的过滤。基于过滤的XSS防御方式通常可分为两种：基于黑名单的过滤和基于白名单的过滤。后者的防御效果往往更好，对于用户在白名单之外的输入，可以直接忽略。在构造白名单的过程中需要保证在不影响用户体验的同时，尽可能杜绝一切不必要的输入内容。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+Flash XSS的修复需要对相应的flash进行修改或升级替换。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+在cookie中加入httponly属性可以在一定程度上保护用户的cookie，减少出现XSS时损失。
+</p>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">6、漏洞扫描与发现</h3>
+<div style="box-sizing:border-box;">
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+XSScrapy - 快速，彻底的XSS / SQLI蜘蛛扫描
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+给它一个URL，它会测试每一个环节可能会发生的跨站攻击和SQL注入漏洞。
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+基本使用方法：
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">.<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>xsscrapy.py <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-u</span> http:<span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>example.com</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+如果你想登录以后然后爬行：
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;">.<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>xsscrapy.py <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-u</span> http:<span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>example.com<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>login_page <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-l</span> loginname</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+XSS结果会保存在xsscrapy-vulns.txt中
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+依赖安装包下载：
+</p>
+<pre style="line-height:1.42857;overflow:auto;font-size:13px;box-sizing:border-box;display:block;padding:9.5px;margin:0px 0px 10px;font-family:Menlo, Monaco, Consolas, &quot;Courier New&quot;, monospace;color:rgb(51, 51, 51);word-break:break-all;word-wrap:break-word;background-color:rgb(245, 245, 245);border:1px solid rgb(204, 204, 204);border-radius:4px;"><span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">wget</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-O</span> https:<span style="box-sizing:border-box;color:rgb(102, 204, 102);">//</span>bootstrap.pypa.io<span style="box-sizing:border-box;color:rgb(102, 204, 102);">/</span>get-pip.py
+python get-pip.py
+pip <span style="box-sizing:border-box;color:rgb(0, 0, 0);font-weight:bold;">install</span> <span style="box-sizing:border-box;color:rgb(102, 0, 51);">-r</span> requirements.txt</pre>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+github地址：<a href="https://web.archive.org/web/20160413024819/https://github.com/DanMcInerney/xsscrapy" title="https://github.com/DanMcInerney/xsscrapy" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">https://github.com/DanMcInerney/xsscrapy</a>
+</p>
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">7、相关其他安全问题</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+</div>
+
+<h3 style="box-sizing:border-box;font-family:inherit;font-weight:500;line-height:1.1;color:inherit;margin-top:20px;margin-bottom:10px;font-size:24px;">8、相关资源</h3>
+<div style="box-sizing:border-box;">
+<hr style="border-left-style:initial;height:0px;margin-top:20px;margin-bottom:20px;border-width:1px 0px 0px;border-right-style:initial;border-bottom-style:initial;box-sizing:content-box;border-right-color:initial;border-bottom-color:initial;border-left-color:initial;border-image:initial;border-top-style:solid;border-top-color:rgb(238, 238, 238);"/>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160413024819/http://drops.wooyun.org/papers/146" title="http://drops.wooyun.org/papers/146" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">Browser Security-基本概念</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160413024819/http://drops.wooyun.org/tips/147" title="http://drops.wooyun.org/tips/147" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">Browser Security-超文本标记语言（HTML）</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160413024819/http://drops.wooyun.org/tips/150" title="http://drops.wooyun.org/tips/150" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">Browser Security-css、javascript</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160413024819/http://drops.wooyun.org/tips/151" title="http://drops.wooyun.org/tips/151" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">Browser Security-同源策略、伪URL的域</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160413024819/http://drops.wooyun.org/tips/689" title="http://drops.wooyun.org/tips/689" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">XSS与字符编码的那些事儿 ---科普文</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160413024819/http://drops.wooyun.org/tips/879" title="http://drops.wooyun.org/tips/879" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">fuzzing XSS filter</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160413024819/http://drops.wooyun.org/papers/948" title="http://drops.wooyun.org/papers/948" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">一些你可能不知道的Flash XSS技巧</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160413024819/http://drops.wooyun.org/tips/956" title="http://drops.wooyun.org/tips/956" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">mXSS攻击的成因及常见种类</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160413024819/http://drops.wooyun.org/papers/1327" title="http://drops.wooyun.org/papers/1327" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">XSS和字符集的那些事儿</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160413024819/http://drops.wooyun.org/tips/1985" title="http://drops.wooyun.org/tips/1985" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">一种自动化检测 Flash 中 XSS 方法的探讨</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160413024819/http://drops.wooyun.org/tips/2924" title="http://drops.wooyun.org/tips/2924" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">常见Flash XSS攻击方式</a>
+</p>
+
+<p style="box-sizing:border-box;margin:0px 0px 10px;">
+<a href="https://web.archive.org/web/20160413024819/http://drops.wooyun.org/web/5049" title="http://drops.wooyun.org/web/5049" rel="nofollow" style="box-sizing:border-box;background-color:transparent;color:rgb(51, 122, 183);text-decoration:none;background-repeat:no-repeat;background-position:0px center;padding:0px 0px 0px 18px;background-image:url(&amp;quot;/web/20160409021439/http://wiki.wooyun.org/lib/images/external-link.png&amp;quot;);">延长 XSS 生命期</a>
+</p>
+
+</div>
+
+              
+
+                            
+            <span style="display:table;clear:both;"/></div></div></div></span></div></div></div></div></div><br/></div></body></html>
